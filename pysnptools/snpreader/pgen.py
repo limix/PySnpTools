@@ -109,7 +109,7 @@ class PGen(SnpReader):
             self._filepointer.close()
             self._filepointer = None
 
-    def _read(self, iid_index_or_none, sid_index_or_none, order, dtype, force_python_only, view_ok):
+    def _read(self, iid_index_or_none, sid_index_or_none, order, dtype, force_python_only, view_ok, out_buffer):
         if force_python_only:
             raise NotImplementedError("No Python only mode")
         self._run_once()
@@ -136,7 +136,7 @@ class PGen(SnpReader):
         val = np.empty((sid_count_out, iid_count_out), order=order, dtype=np.int8)
         pgen_fn = SnpReader._name_of_other_file(self.filename,"pgen","pgen")
 
-        print "sid : ", len(sid_index_out)
+        #print "sid : ", len(sid_index_out)
         #print "iid : ", iid_index_out
         self._open_pgen(iid_index_out)
         for i, idx in enumerate(sid_index_out):
@@ -144,15 +144,49 @@ class PGen(SnpReader):
             self._filepointer.read(variant_idx=idx, geno_int8_out=val[i], allele_idx=1)
         self._close_pgen()
         #print val
-        print val.shape
+        #print val.shape
         val = val.T
-        if val.dtype != dtype:
-            val = np.array(val, dtype=dtype)
-        return val
+        
+        if out_buffer is not None:
+            assert out_buffer.dtype == dtype, "Wrong type"
+            assert out_buffer.shape[0] >= iid_count_out, "insufficient first dimension"
+            assert out_buffer.shape[1] >= sid_count_out, "insufficient second dimension"
+        elif val.dtype != dtype:
+            out_buffer = np.array(val, dtype=dtype)
+        else:
+            out_buffer = val
+        return out_buffer
 
 
 if __name__ == "__main__":
     pgenfile = "/Users/clippert/Source/cerebro/CodeBase/Src/Pgenlib/example_data/qc-export-20160229-NODEV-VarMaj_Hg38_Mm.pgen"
     reader = PGen(filename=pgenfile, count_A1=None, iid=None, sid=None, pos=None, skip_format_check=False)
     l=reader[:,10000:20000].read()
+
+    import time
+    stepsize = 10000
+    t0 = time.time()
+    start = 0
+    stop = 0
+    for i in xrange(100):
+        start = stop
+        stop = start + stepsize
+        ll = reader[:,start:stop].read(out_buffer=None)
+    t1 = time.time()
+    diff = t1 - t0
+
+    print "time unbuffered: ", diff
+
+    t0_ = time.time()
+    start = 0
+    stop = 0
+    val = np.zeros((l.val.shape[0], stepsize), dtype=np.float64)
+    for i in xrange(100):
+        start = stop
+        stop = start + stepsize
+        ll = reader[:,start:stop].read(out_buffer=val)
+    t1_ = time.time()
+    diff_ = t1_- t0_
+    print "time   buffered: ", diff_
+
     print l.val
