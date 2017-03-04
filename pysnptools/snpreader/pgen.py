@@ -114,6 +114,9 @@ class PGen(SnpReader):
             raise NotImplementedError("No Python only mode")
         self._run_once()
 
+        if order=='A':
+            order='F'
+        
         assert not hasattr(self, 'ind_used'), "A SnpReader should not have a 'ind_used' attribute"
 
         iid_count_in = self.iid_count
@@ -133,29 +136,38 @@ class PGen(SnpReader):
             sid_count_out = sid_count_in
             sid_index_out = range(sid_count_in)
 
-        val = np.empty((sid_count_out, iid_count_out), order=order, dtype=np.int8)
-        pgen_fn = SnpReader._name_of_other_file(self.filename,"pgen","pgen")
-
-        #print "sid : ", len(sid_index_out)
-        #print "iid : ", iid_index_out
-        self._open_pgen(iid_index_out)
-        for i, idx in enumerate(sid_index_out):
-            # print i, idx
-            self._filepointer.read(variant_idx=idx, geno_int8_out=val[i], allele_idx=1)
-        self._close_pgen()
-        #print val
-        #print val.shape
-        val = val.T
+        out_compatible = (order=="F") and ((dtype == np.int8) or (dtype == np.int32) or (dtype == np.int64))
         
         if out_buffer is not None:
             assert out_buffer.dtype == dtype, "Wrong type"
-            assert out_buffer.shape[0] >= iid_count_out, "insufficient first dimension"
-            assert out_buffer.shape[1] >= sid_count_out, "insufficient second dimension"
-        elif val.dtype != dtype:
-            out_buffer = np.array(val, dtype=dtype)
+            assert out_buffer.flags["F_CONTIGUOUS"] == (order=='F'), "wrong order"
+            assert out_buffer.shape[0] == iid_count_out, "insufficient first dimension"
+            assert out_buffer.shape[1] == sid_count_out, "insufficient second dimension"
+            
+        if out_compatible and (out_buffer is not None):
+            val = out_buffer.T
+            dtype_val = out_buffer.dtype
+        elif out_compatible:
+            dtype_val = dtype
+            val = np.empty((sid_count_out, iid_count_out), order='C', dtype=dtype_val)
+            out_buffer = val.T  
         else:
-            out_buffer = val
-        return out_buffer
+            dtype_val = np.int8
+            val = np.empty((sid_count_out, iid_count_out), order='C', dtype=dtype_val)
+
+        pgen_fn = SnpReader._name_of_other_file(self.filename,"pgen","pgen")
+
+        self._open_pgen(iid_index_out)
+        self._filepointer.read_list(np.array(sid_index_out, dtype=np.uint32), val)
+        self._close_pgen()
+
+        if (out_buffer is None) and out_compatible:
+            out_buffer = val.T
+        elif (out_buffer is not None) and (not out_compatible):
+            out_buffer[:] = val.T
+        elif (out_buffer is None) and (not out_compatible):
+            out_buffer = np.array(val.T,  dtype=dtype, order=order)
+        return out_buffer # [:iid_count_out,:sid_count_out]
 
 
 if __name__ == "__main__":
@@ -163,30 +175,31 @@ if __name__ == "__main__":
     reader = PGen(filename=pgenfile, count_A1=None, iid=None, sid=None, pos=None, skip_format_check=False)
     l=reader[:,10000:20000].read()
 
-    import time
-    stepsize = 10000
-    t0 = time.time()
-    start = 0
-    stop = 0
-    for i in xrange(100):
-        start = stop
-        stop = start + stepsize
-        ll = reader[:,start:stop].read(out_buffer=None)
-    t1 = time.time()
-    diff = t1 - t0
+    if 1:
+        import time
+        stepsize = 10000
+        t0 = time.time()
+        start = 0
+        stop = 0
+        for i in xrange(100):
+            start = stop
+            stop = start + stepsize
+            ll = reader[:,start:stop].read(out_buffer=None)
+        t1 = time.time()
+        diff = t1 - t0
 
-    print "time unbuffered: ", diff
+        print "time unbuffered: ", diff
 
-    t0_ = time.time()
-    start = 0
-    stop = 0
-    val = np.zeros((l.val.shape[0], stepsize), dtype=np.float64)
-    for i in xrange(100):
-        start = stop
-        stop = start + stepsize
-        ll = reader[:,start:stop].read(out_buffer=val)
-    t1_ = time.time()
-    diff_ = t1_- t0_
-    print "time   buffered: ", diff_
+        t0_ = time.time()
+        start = 0
+        stop = 0
+        val = np.zeros((l.val.shape[0], stepsize), dtype=np.float64, order="F")
+        for i in xrange(100):
+            start = stop
+            stop = start + stepsize
+            ll = reader[:,start:stop].read(out_buffer=val)
+        t1_ = time.time()
+        diff_ = t1_- t0_
+        print "time   buffered: ", diff_
 
-    print l.val
+        print l.val
