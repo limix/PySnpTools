@@ -167,6 +167,8 @@ class PGen(SnpReader):
             out_buffer[:] = val.T
         elif (out_buffer is None) and (not out_compatible):
             out_buffer = np.array(val.T,  dtype=dtype, order=order)
+        if (out_buffer.dtype == np.float64) or (out_buffer.dtype == np.float32):
+            out_buffer[out_buffer==-9.0] = np.nan
         return out_buffer # [:iid_count_out,:sid_count_out]
 
 
