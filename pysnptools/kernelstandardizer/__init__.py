@@ -16,7 +16,7 @@ class KernelStandardizer(object):
 
     >>> from pysnptools.kernelstandardizer import DiagKtoN
     >>> from pysnptools.kernelreader import KernelNpz
-    >>> kerneldata1 = KernelNpz('../examples/toydata.kernel.npz').read()
+    >>> kerneldata1 = KernelNpz('pysnptools/examples/toydata.kernel.npz').read()
     >>> print(np.diag(kerneldata1.val).sum())
     5000000.0
     >>> kerneldata1 = kerneldata1.standardize(DiagKtoN())
@@ -25,7 +25,7 @@ class KernelStandardizer(object):
 
     Can also return a constant kernel standardizer that be applied to other :class:`.KernelData`.
 
-    >>> kernel_whole = KernelNpz('../examples/toydata.kernel.npz')
+    >>> kernel_whole = KernelNpz('pysnptools/examples/toydata.kernel.npz')
     >>> train_idx, test_idx = range(10,kernel_whole.iid_count), range(0,10)  #test on the first 10, train on the rest
     >>> kernel_train, trained_standardizer = DiagKtoN().standardize(kernel_whole[train_idx].read(),return_trained=True)
     >>> print(np.diag(kernel_train.val).sum())
@@ -66,7 +66,7 @@ class Identity(KernelStandardizer):
 
     >>> from pysnptools.kernelstandardizer import Identity as KS_Identity
     >>> from pysnptools.kernelreader import KernelNpz
-    >>> kerneldata1 = KernelNpz('../examples/toydata.kernel.npz').read()
+    >>> kerneldata1 = KernelNpz('pysnptools/examples/toydata.kernel.npz').read()
     >>> print(np.diag(kerneldata1.val).sum())
     5000000.0
     >>> kerneldata1 = kerneldata1.standardize(KS_Identity())

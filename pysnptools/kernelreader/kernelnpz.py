@@ -18,7 +18,7 @@ class KernelNpz(KernelReader,PstNpz):
         :Example:
 
         >>> from pysnptools.kernelreader import KernelNpz
-        >>> data_on_disk = KernelNpz('../examples/toydata.kernel.npz')
+        >>> data_on_disk = KernelNpz('pysnptools/examples/toydata.kernel.npz')
         >>> print(data_on_disk.iid_count)
         500
 
@@ -41,7 +41,7 @@ class KernelNpz(KernelReader,PstNpz):
         >>> from pysnptools.snpreader import Bed
         >>> from pysnptools.standardizer import Unit
         >>> import pysnptools.util as pstutil
-        >>> kerneldata = Bed('../examples/toydata.bed',count_A1=False).read_kernel(Unit())     # Create a kernel from the data in the Bed file
+        >>> kerneldata = Bed('pysnptools/examples/toydata.bed',count_A1=False).read_kernel(Unit())     # Create a kernel from the data in the Bed file
         >>> pstutil.create_directory_if_necessary("tempdir/toydata.kernel.npz")
         >>> KernelNpz.write("tempdir/toydata.kernel.npz",kerneldata)      # Write data in KernelNpz format
         """

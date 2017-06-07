@@ -15,7 +15,7 @@ class UnitTrained(Standardizer):
 
     >>> from pysnptools.standardizer import Unit
     >>> from pysnptools.snpreader import Bed
-    >>> train = Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False)[1:,:].read() # read SNP values for all but the first iid
+    >>> train = Bed('tests/datasets/all_chr.maf0.001.N300',count_A1=False)[1:,:].read() # read SNP values for all but the first iid
     >>> _, unittrained = train.standardize(Unit(),return_trained=True) #Unit standardize and remember the mean and stddev of each sid
     >>> print(unittrained.stats[:5,:]) #Print the means and stddev of the first five sids
     [[ 1.94983278  0.21828988]
@@ -23,7 +23,7 @@ class UnitTrained(Standardizer):
      [ 1.84280936  0.39057474]
      [ 1.99665552  0.0577347 ]
      [ 1.97658863  0.15120608]]
-    >>> test = Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False)[0,:].read() # read SNP values for the first iid
+    >>> test = Bed('tests/datasets/all_chr.maf0.001.N300',count_A1=False)[0,:].read() # read SNP values for the first iid
     >>> test = test.standardize(unittrained) # Use the mean and stddev of the train data to unit standardize the test data.
     >>> print(test.val[0,0])
     0.229819279888

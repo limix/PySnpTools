@@ -15,9 +15,9 @@ class KernelReader(PstReader):
     * A class such as :class:`KernelNpz` for you to specify data in a file. For example,
 
         >>> from pysnptools.kernelreader import KernelNpz
-        >>> kernel_on_disk = KernelNpz('../examples/toydata.kernel.npz')
+        >>> kernel_on_disk = KernelNpz('pysnptools/examples/toydata.kernel.npz')
         >>> print(kernel_on_disk) # prints specification for reading from file
-        KernelNpz('../examples/toydata.kernel.npz')
+        KernelNpz('pysnptools/examples/toydata.kernel.npz')
         >>> kernel_on_disk.iid_count # prints the number of iids (but doesn't read any kernel values)
         500
 
@@ -26,19 +26,19 @@ class KernelReader(PstReader):
         >>> # Compute kernel from a SnpReader
         >>> from pysnptools.snpreader import Bed
         >>> from pysnptools.standardizer import Unit
-        >>> snp_on_disk = Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False)
+        >>> snp_on_disk = Bed('tests/datasets/all_chr.maf0.001.N300',count_A1=False)
         >>> kerneldata1 = snp_on_disk.read_kernel(Unit()) #reads the SNP values and computes the kernel
         >>> type(kerneldata1.val) # The val property is an ndarray of kernel values
         <type 'numpy.ndarray'>
         >>> print(kerneldata1) # prints the specification of the in-memory kernel information
-        KernelData(SnpKernel(Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False),standardizer=Unit()))
+        KernelData(SnpKernel(Bed('tests/datasets/all_chr.maf0.001.N300',count_A1=False),standardizer=Unit()))
         >>> kerneldata1.iid_count #prints the number of iids (number of individuals) in this in-memory data
         300
         >>> # Read kernel from a KernelReader
-        >>> kernel_on_disk = KernelNpz('../examples/toydata.kernel.npz')
+        >>> kernel_on_disk = KernelNpz('pysnptools/examples/toydata.kernel.npz')
         >>> kerneldata2 = kernel_on_disk.read() #reads the kernel values
         >>> print(kerneldata2) # prints the specification of the in-memory kernel information
-        KernelData(KernelNpz('../examples/toydata.kernel.npz'))
+        KernelData(KernelNpz('pysnptools/examples/toydata.kernel.npz'))
         >>> kerneldata2.iid_count #prints the number of iids (number of individuals) in this in-memory data
         500
 
@@ -46,15 +46,15 @@ class KernelReader(PstReader):
     * A subset of any KernelReader, specified with "[ *iid_index* ]" (or  specified with "[ *iid0_index* , *iid1_index* ]"), to read only some kernel values. It can
       also be used to re-order the values.
 
-        >>> kernel_on_disk = KernelNpz('../examples/toydata.kernel.npz')
+        >>> kernel_on_disk = KernelNpz('pysnptools/examples/toydata.kernel.npz')
         >>> subset_on_disk1 = kernel_on_disk[[3,4]] # specification for a subset of the data on disk. No kernel values are read yet.
         >>> print(subset_on_disk1.iid_count) # prints the number of iids in this subset (but still doesn't read any kernel values)
         2
         >>> print(subset_on_disk1) #prints a specification of 'subset_on_disk1'
-        KernelNpz('../examples/toydata.kernel.npz')[[3,4],[3,4]]
+        KernelNpz('pysnptools/examples/toydata.kernel.npz')[[3,4],[3,4]]
         >>> kerneldata_subset = subset_on_disk1.read() # efficiently (if possible) reads the specified subset of values from the disk
         >>> print(kerneldata_subset) # prints the specification of the in-memory kernel information
-        KernelData(KernelNpz('../examples/toydata.kernel.npz')[[3,4],[3,4]])
+        KernelData(KernelNpz('pysnptools/examples/toydata.kernel.npz')[[3,4],[3,4]])
         >>> print(int(kerneldata_subset.val.shape[0]), int(kerneldata_subset.val.shape[1])) # The dimensions of the ndarray of kernel values
         2 2
         >>> subset_on_disk2 = kernel_on_disk[[3,4],::2] # specification for a subset of the data on disk. No kernel values are read yet.
@@ -93,7 +93,7 @@ class KernelReader(PstReader):
         >>> from pysnptools.snpreader import Bed
         >>> from pysnptools.standardizer import Unit
         >>> import pysnptools.util as pstutil
-        >>> kerneldata = Bed('../examples/toydata.bed',count_A1=False).read_kernel(Unit())     # Create a kernel from the data in the Bed file
+        >>> kerneldata = Bed('pysnptools/examples/toydata.bed',count_A1=False).read_kernel(Unit())     # Create a kernel from the data in the Bed file
         >>> pstutil.create_directory_if_necessary("tempdir/toydata.kernel.npz")
         >>> KernelNpz.write("tempdir/toydata.kernel.npz",kerneldata)      # Write data in KernelNpz format
 
@@ -101,7 +101,7 @@ class KernelReader(PstReader):
 
         Individual are identified with an iid, which is a ndarray of two strings: a family ID and a case ID. For example:
 
-        >>> kernel_on_disk = KernelNpz('../examples/toydata.kernel.npz')
+        >>> kernel_on_disk = KernelNpz('pysnptools/examples/toydata.kernel.npz')
         >>> print(kernel_on_disk.iid[:3]) # print the first three iids
         [['per0' 'per0']
          ['per1' 'per1']
@@ -126,12 +126,12 @@ class KernelReader(PstReader):
         kernel data. The method multiples the values with a scalar factor such that the diagonal sums to iid_count. Although it works in place, for convenience
         it also returns itself. See :meth:`.KernelData.standardize` for details.
 
-            >>> kernel_on_disk = KernelNpz('../examples/toydata.kernel.npz')
+            >>> kernel_on_disk = KernelNpz('pysnptools/examples/toydata.kernel.npz')
             >>> kerneldata1 = kernel_on_disk.read() # read all kernel values into memory
             >>> print(np.diag(kerneldata1.val).sum())
             5000000.0
             >>> kerneldata1.standardize() # standardize changes the values in kerneldata1.val
-            KernelData(KernelNpz('../examples/toydata.kernel.npz'))
+            KernelData(KernelNpz('pysnptools/examples/toydata.kernel.npz'))
             >>> print(np.diag(kerneldata1.val).sum())
             500.0
             >>> kerneldata2 = kernel_on_disk.read().standardize() # Read and standardize in one expression with only one ndarray allocated.
@@ -155,7 +155,7 @@ class KernelReader(PstReader):
         :Example:
 
         >>> from pysnptools.kernelreader import KernelNpz
-        >>> kernel_on_disk = KernelNpz('../examples/toydata.kernel.npz')
+        >>> kernel_on_disk = KernelNpz('pysnptools/examples/toydata.kernel.npz')
         >>> print(kernel_on_disk.iid[:3]) # print the first three iids
         [['per0' 'per0']
          ['per1' 'per1']
@@ -264,7 +264,7 @@ class KernelReader(PstReader):
         :Example:
 
         >>> from pysnptools.kernelreader import KernelNpz
-        >>> kernel_on_disk = KernelNpz('../examples/toydata.kernel.npz')
+        >>> kernel_on_disk = KernelNpz('pysnptools/examples/toydata.kernel.npz')
         >>> kerneldata1 = kernel_on_disk.read() # Read all the kernel data returning a KernelData instance
         >>> print(type(kerneldata1.val)) # The KernelData instance contains a ndarray of the data.
         <type 'numpy.ndarray'>
@@ -294,7 +294,7 @@ class KernelReader(PstReader):
         :Example:
 
         >>> from pysnptools.kernelreader import KernelNpz
-        >>> kernel_on_disk = KernelNpz('../examples/toydata.kernel.npz')
+        >>> kernel_on_disk = KernelNpz('pysnptools/examples/toydata.kernel.npz')
         >>> print(kernel_on_disk.iid_to_index([['per2','per2'],['per1','per1']])) #Find the indexes for two iids.
         [2 1]
         """

@@ -19,7 +19,7 @@ class SnpNpz(PstNpz,SnpReader):
         :Example:
 
         >>> from pysnptools.snpreader import SnpNpz
-        >>> data_on_disk = SnpNpz('../examples/toydata10.snp.npz')
+        >>> data_on_disk = SnpNpz('pysnptools/examples/toydata10.snp.npz')
         >>> print(data_on_disk.iid_count, data_on_disk.sid_count)
         500 10
 
@@ -41,7 +41,7 @@ class SnpNpz(PstNpz,SnpReader):
 
         >>> from pysnptools.snpreader import SnpNpz, Bed
         >>> import pysnptools.util as pstutil
-        >>> snpdata = Bed('../examples/toydata.bed',count_A1=False)[:,:10].read()     # Read first 10 snps from Bed format
+        >>> snpdata = Bed('pysnptools/examples/toydata.bed',count_A1=False)[:,:10].read()     # Read first 10 snps from Bed format
         >>> pstutil.create_directory_if_necessary("tempdir/toydata10.snp.npz")
         >>> SnpNpz.write("tempdir/toydata10.snp.npz",snpdata)          # Write data in SnpNpz format
         """

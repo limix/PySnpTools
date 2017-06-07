@@ -71,7 +71,7 @@ class SnpData(PstData,SnpReader):
     """The 2D NumPy array of floats that represents the values of the SNPs.
 
     >>> from pysnptools.snpreader import Bed
-    >>> snpdata = Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False)[:5,:].read() #read data for first 5 iids
+    >>> snpdata = Bed('tests/datasets/all_chr.maf0.001.N300',count_A1=False)[:5,:].read() #read data for first 5 iids
     >>> print(snpdata.val[4,100]) #print one of the SNP values
     2.0
     """
@@ -112,14 +112,14 @@ class SnpData(PstData,SnpReader):
         :rtype: :class:`.SnpData` (standardizes in place, but for convenience, returns 'self')
 
         >>> from pysnptools.snpreader import Bed
-        >>> snp_on_disk = Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False) # Specify some data on disk in Bed format
+        >>> snp_on_disk = Bed('tests/datasets/all_chr.maf0.001.N300',count_A1=False) # Specify some data on disk in Bed format
         >>> snpdata1 = snp_on_disk.read() # read all SNP values into memory
         >>> print(snpdata1) # Prints the specification for this SnpData
-        SnpData(Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False))
+        SnpData(Bed('tests/datasets/all_chr.maf0.001.N300',count_A1=False))
         >>> print(snpdata1.val[0,0])
         2.0
         >>> snpdata1.standardize() # standardize changes the values in snpdata1.val and changes the specification.
-        SnpData(Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False),Unit())
+        SnpData(Bed('tests/datasets/all_chr.maf0.001.N300',count_A1=False),Unit())
         >>> print(snpdata1.val[0,0])
         0.229415733871
         >>> snpdata2 = snp_on_disk.read().standardize() # Read and standardize in one expression with only one ndarray allocated.

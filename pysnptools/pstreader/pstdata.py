@@ -77,7 +77,7 @@ class PstData(PstReader):
     """The 2D NumPy array of floats that represents the values.
 
     >>> from pysnptools.pstreader import PstNpz
-    >>> pstdata = PstNpz('../examples/toydata.pst.npz')[:5,:].read() #read data for first 5 rows
+    >>> pstdata = PstNpz('pysnptools/examples/toydata.pst.npz')[:5,:].read() #read data for first 5 rows
     >>> print(pstdata.val[4,100]) #print one of the values
     2.0
     """

@@ -24,7 +24,7 @@ class PstHdf5(PstReader):
         :Example:
 
         >>> from pysnptools.pstreader import PstHdf5
-        >>> on_disk = PstHdf5('../examples/toydata.iidmajor.snp.hdf5') # PstHdf5 can load .pst.hdf5, .snp.hdf5, and kernel.hdf5
+        >>> on_disk = PstHdf5('pysnptools/examples/toydata.iidmajor.snp.hdf5') # PstHdf5 can load .pst.hdf5, .snp.hdf5, and kernel.hdf5
         >>> print(on_disk.row_count)
         500
 

@@ -9,6 +9,13 @@ import math
 import warnings
 from pysnptools.pstreader import PstData
 
+PY3 = sys.version_info[0] == 3
+
+def _encode(s):
+    if PY3:
+        return s.encode()
+    return s
+
 class Bed(SnpReader):
     '''
     A :class:`.SnpReader` for random-access reads of Bed/Bim/Fam files from disk.
@@ -50,7 +57,7 @@ class Bed(SnpReader):
         if pos is not None:
             self._col_property = PstData._fixup_input(pos,count=len(self._col),empty_creator=lambda count:np.array([[np.nan, np.nan, np.nan]]*count))
 
-    def __repr__(self): 
+    def __repr__(self):
         return "{0}('{1}',count_A1={2})".format(self.__class__.__name__,self.filename,self.count_A1)
 
     @property
@@ -81,9 +88,9 @@ class Bed(SnpReader):
         bedfile = SnpReader._name_of_other_file(self.filename,"bed","bed")
         self._filepointer = open(bedfile, "rb")
         mode = self._filepointer.read(2)
-        if mode != 'l\x1b': raise Exception('No valid binary BED file')
+        if mode != b'l\x1b': raise Exception('No valid binary BED file')
         mode = self._filepointer.read(1) #\x01 = SNP major \x00 = individual major
-        if mode != '\x01': raise Exception('only SNP-major is implemented')
+        if mode != b'\x01': raise Exception('only SNP-major is implemented')
         logging.info("bed file is open {0}".format(bedfile))
     def _close_bed(self):
         self.__del__()
@@ -130,14 +137,14 @@ class Bed(SnpReader):
 
         >>> from pysnptools.snpreader import Pheno, Bed
         >>> import pysnptools.util as pstutil
-        >>> snpdata = Pheno('../examples/toydata.phe').read()         # Read data from Pheno format
+        >>> snpdata = Pheno('pysnptools/examples/toydata.phe').read()         # Read data from Pheno format
         >>> pstutil.create_directory_if_necessary("tempdir/toydata.bed")
         >>> Bed.write("tempdir/toydata.bed",snpdata,count_A1=False)   # Write data in Bed format
         """
 
         if isinstance(filename,SnpData) and isinstance(snpdata,str): #For backwards compatibility, reverse inputs if necessary
             warnings.warn("write statement should have filename before data to write", DeprecationWarning)
-            filename, snpdata = snpdata, filename 
+            filename, snpdata = snpdata, filename
 
         if count_A1 is None:
              warnings.warn("'count_A1' was not set. For now it will default to 'False', but in the future it will default to 'True'", FutureWarning)
@@ -170,7 +177,7 @@ class Bed(SnpReader):
                     wrap_plink_parser.writePlinkBedFile2floatCAAA(bedfile, snpdata.iid_count, snpdata.sid_count, count_A1, snpdata.val)
             else:
                 raise Exception("dtype '{0}' not known, only float64 and float32".format(snpdata.val.dtype))
-            
+
         else:
             if not count_A1:
                 zero_code = 0b00
@@ -237,7 +244,7 @@ class Bed(SnpReader):
         if not force_python_only:
             from pysnptools.snpreader import wrap_plink_parser
             val = np.zeros((iid_count_out, sid_count_out), order=order, dtype=dtype)
-            bed_fn = SnpReader._name_of_other_file(self.filename,"bed","bed")
+            bed_fn = _encode(SnpReader._name_of_other_file(self.filename,"bed","bed"))
 
             if dtype == np.float64:
                 if order=="F":
@@ -255,7 +262,7 @@ class Bed(SnpReader):
                     raise Exception("order '{0}' not known, only 'F' and 'C'".format(order));
             else:
                 raise Exception("dtype '{0}' not known, only float64 and float32".format(dtype))
-            
+
         else:
             if not self.count_A1:
                 byteZero = 0
@@ -264,8 +271,8 @@ class Bed(SnpReader):
                 byteZero = 2
                 byteThree = 0
             # An earlier version of this code had a way to read consecutive SNPs of code in one read. May want
-            # to add that ability back to the code. 
-            # Also, note that reading with python will often result in non-contiguous memory, so the python standardizers will automatically be used, too.       
+            # to add that ability back to the code.
+            # Also, note that reading with python will often result in non-contiguous memory, so the python standardizers will automatically be used, too.
             self._open_bed()
             logging.warn("using pure python plink parser (might be much slower!!)")
             val = np.zeros(((int(np.ceil(0.25*iid_count_in))*4),sid_count_out),order=order, dtype=dtype) #allocate it a little big

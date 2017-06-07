@@ -50,9 +50,9 @@ def intersect_apply(data_list, sort_by_dataset=True, intersect_before_standardiz
     >>>
     >>> #Create five datasets in different formats
     >>> ignore_in = None
-    >>> kernel_in = SnpKernel(Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False),Unit()) # Create a kernel from a Bed file
-    >>> pheno_in = Pheno('../../tests/datasets/phenSynthFrom22.23.N300.randcidorder.txt',missing="")
-    >>> cov = Pheno('../../tests/datasets/all_chr.maf0.001.covariates.N300.txt',missing="").read()
+    >>> kernel_in = SnpKernel(Bed('tests/datasets/all_chr.maf0.001.N300',count_A1=False),Unit()) # Create a kernel from a Bed file
+    >>> pheno_in = Pheno('tests/datasets/phenSynthFrom22.23.N300.randcidorder.txt',missing="")
+    >>> cov = Pheno('tests/datasets/all_chr.maf0.001.covariates.N300.txt',missing="").read()
     >>> cov_as_tuple_in = (cov.val,cov.iid) #We could do cov directly, but as an example we make it a tuple.
     >>>
     >>> # Create five new datasets with consistent iids

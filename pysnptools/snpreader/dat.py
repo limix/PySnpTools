@@ -29,7 +29,7 @@ class Dat(_OneShot,SnpReader):
         :Example:
 
         >>> from pysnptools.snpreader import Dat
-        >>> data_on_disk = Dat('../examples/toydata.dat')
+        >>> data_on_disk = Dat('pysnptools/examples/toydata.dat')
         >>> print(data_on_disk.iid_count, data_on_disk.sid_count)
         500 10000
 
@@ -75,7 +75,7 @@ class Dat(_OneShot,SnpReader):
 
         >>> from pysnptools.snpreader import Dat, Bed
         >>> import pysnptools.util as pstutil
-        >>> snpdata = Bed('../examples/toydata.bed',count_A1=False)[:,:10].read()  # Read first 10 snps from Bed format
+        >>> snpdata = Bed('pysnptools/examples/toydata.bed',count_A1=False)[:,:10].read()  # Read first 10 snps from Bed format
         >>> pstutil.create_directory_if_necessary("tempdir/toydata10.dat")
         >>> Dat.write("tempdir/toydata10.dat",snpdata)              # Write data in dat/fam/map format
         """

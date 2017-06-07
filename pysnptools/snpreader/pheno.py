@@ -39,7 +39,7 @@ class Pheno(_OneShot, SnpReader):
         :Example:
 
         >>> from pysnptools.snpreader import Pheno, Bed
-        >>> data_on_disk = Pheno('../examples/toydata.phe')
+        >>> data_on_disk = Pheno('pysnptools/examples/toydata.phe')
         >>> print(data_on_disk.iid_count, data_on_disk.sid_count)
         500 1
 
@@ -99,7 +99,7 @@ class Pheno(_OneShot, SnpReader):
 
         >>> from pysnptools.snpreader import Pheno, Bed
         >>> import pysnptools.util as pstutil
-        >>> snpdata = Bed('../examples/toydata.bed',count_A1=False)[:,:10].read()  # Read first 10 snps from Bed format
+        >>> snpdata = Bed('pysnptools/examples/toydata.bed',count_A1=False)[:,:10].read()  # Read first 10 snps from Bed format
         >>> pstutil.create_directory_if_necessary("tempdir/toydata10.phe")
         >>> Pheno.write("tempdir/toydata10.txt",snpdata)       # Write data in Pheno format
         """
