@@ -53,7 +53,7 @@ class Identity(KernelReader):
 
     _empty = np.empty([0,2],dtype=str)
 
-    def __repr__(self): 
+    def __repr__(self):
         return "{0}({1}x{2})".format(self.__class__.__name__, self.row_count, self.col_count)
 
 
@@ -90,7 +90,7 @@ class Identity(KernelReader):
         test=self.iid1[col_index_or_none]
         if len(iid) == len(test) and np.array_equal(iid,test):
             result = Identity(iid)
-        else: 
+        else:
             result = Identity(iid=iid,test=test)
         return result
 

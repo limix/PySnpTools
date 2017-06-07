@@ -119,36 +119,54 @@ class CleanCommand(Clean):
                     os.unlink(tmp_fn)
 
 
-needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
-pytest_runner = ['pytest-runner>=2.9'] if needs_pytest else []
-setup_requires = ["cython", "numpy"] + pytest_runner
+def setup_package():
+    src_path = os.path.dirname(os.path.abspath(sys.argv[0]))
+    old_path = os.getcwd()
+    os.chdir(src_path)
+    sys.path.insert(0, src_path)
 
-setup(
-    name='pysnptools',
-    version=version,
-    description='PySnpTools',
-    long_description=readme(),
-    keywords='gwas bioinformatics sets intervals ranges regions',
-    url="http://research.microsoft.com/en-us/um/redmond/projects/mscompbio/",
-    author='MSR',
-    author_email='fastlmm@microsoft.com',
-    license='Apache 2.0',
-    packages=[
-        "pysnptools/snpreader", "pysnptools/kernelreader",
-        "pysnptools/pstreader", "pysnptools/standardizer",
-        "pysnptools/kernelstandardizer", "pysnptools/util", "pysnptools"
-    ],
-    package_data={
-        "pysnptools": [
-            "test/datasets/all_chr.maf0.001.N300.bed",
-            "test/datasets/all_chr.maf0.001.N300.bim",
-            "test/datasets/all_chr.maf0.001.N300.fam",
-            "test/datasets/phenSynthFrom22.23.N300.randcidorder.txt",
-            "tests/datasets/all_chr.maf0.001.covariates.N300.txt"
-        ]
-    },
-    install_requires=['scipy>=0.15.1', 'numpy>=1.9.2', 'pandas>=0.16.2'],
-    setup_requires=setup_requires,
-    # extensions
-    cmdclass=cmdclass,
-    ext_modules=ext_modules)
+    needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
+    pytest_runner = ['pytest-runner>=2.9'] if needs_pytest else []
+    setup_requires = ["cython", "numpy"] + pytest_runner
+    tests_require = ['pytest']
+
+    setup(
+        name='pysnptools',
+        version=version,
+        description='PySnpTools',
+        long_description=readme(),
+        keywords='gwas bioinformatics sets intervals ranges regions',
+        url=
+        "http://research.microsoft.com/en-us/um/redmond/projects/mscompbio/",
+        author='MSR',
+        author_email='fastlmm@microsoft.com',
+        license='Apache 2.0',
+        packages=[
+            "pysnptools/snpreader", "pysnptools/kernelreader",
+            "pysnptools/pstreader", "pysnptools/standardizer",
+            "pysnptools/kernelstandardizer", "pysnptools/util", "pysnptools"
+        ],
+        package_data={
+            "pysnptools": [
+                "test/datasets/all_chr.maf0.001.N300.bed",
+                "test/datasets/all_chr.maf0.001.N300.bim",
+                "test/datasets/all_chr.maf0.001.N300.fam",
+                "test/datasets/phenSynthFrom22.23.N300.randcidorder.txt",
+                "tests/datasets/all_chr.maf0.001.covariates.N300.txt"
+            ]
+        },
+        install_requires=['scipy>=0.15.1', 'numpy>=1.9.2', 'pandas>=0.16.2'],
+        setup_requires=setup_requires,
+        tests_require=tests_require,
+        cmdclass=cmdclass,
+        ext_modules=ext_modules)
+
+    try:
+        setup(**metadata)
+    finally:
+        del sys.path[0]
+        os.chdir(old_path)
+
+
+if __name__ == '__main__':
+    setup_package()
