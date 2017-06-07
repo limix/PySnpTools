@@ -58,7 +58,7 @@ def intersect_apply(data_list, sort_by_dataset=True, intersect_before_standardiz
     >>> # Create five new datasets with consistent iids
     >>> ignore_out, kernel_out, pheno_out, cov_as_tuple_out = intersect_apply([ignore_in, kernel_in, pheno_in, cov_as_tuple_in])
     >>> # Print the first five iids from each dataset
-    >>> print(ignore_out, kernel_out.iid[:5], pheno_out.iid[:5],) cov_as_tuple_out[1][:5]
+    >>> print(ignore_out, kernel_out.iid[:5], pheno_out.iid[:5], cov_as_tuple_out[1][:5])
     None [['POP1' '0']
      ['POP1' '12']
      ['POP1' '44']
@@ -400,7 +400,7 @@ def weighted_simple_linear_regression(xs, ys, weights):
     >>> ys = np.array([103.664086,89.80645161,83.86888046,90.54141176])
     >>> weights = np.array([2.340862423,4.982888433,0.17522245,0.098562628])
     >>> slope, intercept, xmean, ymean = weighted_simple_linear_regression(xs, ys, weights)
-    >>> print(round(slope,5), round(intercept,5), round(xmean,5),) round(ymean,5)
+    >>> print(round(slope,5), round(intercept,5), round(xmean,5), round(ymean,5))
     -3.52643 293.05586 56.46133 93.9487
 
     '''

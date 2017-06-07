@@ -53,7 +53,7 @@ class Dense(_OneShot,SnpReader):
 
         >>> from pysnptools.snpreader import Dense
         >>> data_on_disk = Dense('../examples/toydata100.dense.txt')
-        >>> print(data_on_disk.iid_count,) data_on_disk.sid_count
+        >>> print(data_on_disk.iid_count, data_on_disk.sid_count)
         500 100
 
     **Methods beyond** :class:`.SnpReader`

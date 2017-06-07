@@ -58,7 +58,7 @@ class KernelReader(PstReader):
         >>> print(int(kerneldata_subset.val.shape[0]), int(kerneldata_subset.val.shape[1])) # The dimensions of the ndarray of kernel values
         2 2
         >>> subset_on_disk2 = kernel_on_disk[[3,4],::2] # specification for a subset of the data on disk. No kernel values are read yet.
-        >>> print(subset_on_disk2.iid0_count,) subset_on_disk2.iid1_count
+        >>> print(subset_on_disk2.iid0_count, subset_on_disk2.iid1_count)
         2 250
 
 

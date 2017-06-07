@@ -211,15 +211,15 @@ class PstReader(object):
 
             >>> on_disk = PstNpz('../../tests/datasets/all_chr.maf0.001.N300.pst.npz') # Specify some data on disk in PstNpz format
             >>> subset_reader_1 = on_disk[[3,4],:] #index with an array of indexes
-            >>> print(subset_reader_1.row_count,) subset_reader_1.col_count
+            >>> print(subset_reader_1.row_count, subset_reader_1.col_count)
             2 1015
             >>> data1 = subset_reader_1.read() # read just the two rows of interest from the disk
             >>> subset_reader_2 = on_disk[:,:0:-2] #index with a slice
-            >>> print(subset_reader_2.row_count,) subset_reader_2.col_count
+            >>> print(subset_reader_2.row_count, subset_reader_2.col_count)
             300 507
             >>> boolindexes = [s.startswith('23_') for s in on_disk.col] # create a Boolean index of cols that start '23_'
             >>> subset_reader_3 = on_disk[:,boolindexes] #index with array of Booleans
-            >>> print(subset_reader_3.row_count,) subset_reader_3.col_count
+            >>> print(subset_reader_3.row_count, subset_reader_3.col_count)
             300 24
 
         The first generalization over what ndarray offers is full indexing on both the row dimension and the col dimension, in other words,
@@ -227,14 +227,14 @@ class PstReader(object):
 
             >>> on_disk = PstNpz('../../tests/datasets/all_chr.maf0.001.N300.pst.npz') # Specify some data on disk in PstNpz format
             >>> subset_reader_4 = on_disk[[3,4],:0:-2] # index on two dimensions at once
-            >>> print(subset_reader_4.row_count,) subset_reader_4.col_count
+            >>> print(subset_reader_4.row_count, subset_reader_4.col_count)
             2 507
 
         The second generalization is indexing on a single integer index.
 
             >>> on_disk = PstNpz('../../tests/datasets/all_chr.maf0.001.N300.pst.npz') # Specify some data on disk in PstNpz format
             >>> subset_reader_5 = on_disk[5,:] #index with single integer
-            >>> print(subset_reader_5.row_count,) subset_reader_5.col_count
+            >>> print(subset_reader_5.row_count, subset_reader_5.col_count)
             1 1015
 
         Indexing is also useful when you have matrix values in memory via a :class:`PstData` index and want to copy a subset of those values.

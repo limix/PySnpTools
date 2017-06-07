@@ -28,7 +28,7 @@ class SnpData(PstData,SnpReader):
 
         >>> from pysnptools.snpreader import SnpData
         >>> snpdata = SnpData(iid=[['fam0','iid0'],['fam0','iid1']], sid=['snp334','snp349','snp921'], val=[[0.,2.,0.],[0.,1.,2.]])
-        >>> print(snpdata.val[0,1], snpdata.iid_count,) snpdata.sid_count
+        >>> print(snpdata.val[0,1], snpdata.iid_count, snpdata.sid_count)
         2.0 2 3
 
     **Equality:**

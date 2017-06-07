@@ -211,15 +211,15 @@ class SnpReader(PstReader):
 
             >>> snp_on_disk = Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False) # Specify some data on disk in Bed format
             >>> subset_snpreader_1 = snp_on_disk[[3,4],:] #index with an array of indexes
-            >>> print(subset_snpreader_1.iid_count,) subset_snpreader_1.sid_count
+            >>> print(subset_snpreader_1.iid_count, subset_snpreader_1.sid_count)
             2 1015
             >>> snpdata1 = subset_snpreader_1.read() # read just the two rows of interest from the disk
             >>> subset_snpreader_2 = snp_on_disk[:,:0:-2] #index with a slice
-            >>> print(subset_snpreader_2.iid_count,) subset_snpreader_2.sid_count
+            >>> print(subset_snpreader_2.iid_count, subset_snpreader_2.sid_count)
             300 507
             >>> boolindexes = [s.startswith('23_') for s in snp_on_disk.sid] # create a Boolean index of sids that start '23_'
             >>> subset_snpreader_3 = snp_on_disk[:,boolindexes] #index with array of Booleans
-            >>> print(subset_snpreader_3.iid_count,) subset_snpreader_3.sid_count
+            >>> print(subset_snpreader_3.iid_count, subset_snpreader_3.sid_count)
             300 24
 
         The first generalization over what ndarray offers is full indexing on both the iid dimension and the sid dimension, in other words,
@@ -227,14 +227,14 @@ class SnpReader(PstReader):
 
             >>> snp_on_disk = Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False) # Specify some data on disk in Bed format
             >>> subset_snpreader_4 = snp_on_disk[[3,4],:0:-2] # index on two dimensions at once
-            >>> print(subset_snpreader_4.iid_count,) subset_snpreader_4.sid_count
+            >>> print(subset_snpreader_4.iid_count, subset_snpreader_4.sid_count)
             2 507
 
         The second generalization is indexing on a single integer index.
 
             >>> snp_on_disk = Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False) # Specify some data on disk in Bed format
             >>> subset_snpreader_5 = snp_on_disk[5,:] #index with single integer
-            >>> print(subset_snpreader_5.iid_count,) subset_snpreader_5.sid_count
+            >>> print(subset_snpreader_5.iid_count, subset_snpreader_5.sid_count)
             1 1015
 
         Indexing is also useful when you have SNP values in memory via a :class:`SnpData` index and want to copy a subset of those values.
@@ -522,7 +522,7 @@ class SnpReader(PstReader):
         >>> from pysnptools.standardizer import Unit
         >>> snp_on_disk = Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False) # Specify SNP data on disk
         >>> kerneldata1 = snp_on_disk.read_kernel(Unit())
-        >>> print(int(kerneldata1.iid_count),) kerneldata1.val[0,0]
+        >>> print(int(kerneldata1.iid_count), kerneldata1.val[0,0])
         300 901.421835903
         """
         assert standardizer is not None, "'standardizer' must be provided"
@@ -558,7 +558,7 @@ class SnpReader(PstReader):
         >>> from pysnptools.standardizer import Unit
         >>> snp_on_disk = Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False) # Specify SNP data on disk
         >>> kernel = snp_on_disk.kernel(Unit())
-        >>> print((int(kernel.shape[0]),int(kernel.shape[1])),) kernel[0,0]
+        >>> print((int(kernel.shape[0]),int(kernel.shape[1])), kernel[0,0])
         (300, 300) 901.421835903
         """        #print "entering kernel with {0},{1},{2}".format(self, standardizer, blocksize)
         warnings.warn(".kernel(...) is deprecated. Use '.read_kernel(...).val", DeprecationWarning)

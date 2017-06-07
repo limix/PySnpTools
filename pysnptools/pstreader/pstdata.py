@@ -31,7 +31,7 @@ class PstData(PstReader):
 
         >>> from pysnptools.pstreader import PstData
         >>> pstdata = PstData(row=[['fam0','iid0'],['fam0','iid1']], col=['snp334','snp349','snp921'], val=[[0.,2.,0.],[0.,1.,2.]])
-        >>> print(pstdata.val[0,1], pstdata.row_count,) pstdata.col_count
+        >>> print(pstdata.val[0,1], pstdata.row_count, pstdata.col_count)
         2.0 2 3
 
     **Equality:**

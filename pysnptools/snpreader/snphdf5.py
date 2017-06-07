@@ -20,7 +20,7 @@ class SnpHdf5(PstHdf5,SnpReader):
 
         >>> from pysnptools.snpreader import SnpHdf5
         >>> data_on_disk = SnpHdf5('../examples/toydata.snpmajor.snp.hdf5')
-        >>> print(data_on_disk.iid_count,) data_on_disk.sid_count
+        >>> print(data_on_disk.iid_count, data_on_disk.sid_count)
         500 10000
 
     **Methods beyond** :class:`.SnpReader`
