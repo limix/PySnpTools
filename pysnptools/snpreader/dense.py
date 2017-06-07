@@ -1,7 +1,7 @@
 import numpy as np
 import logging
-from snpreader import SnpReader
-from snpdata import SnpData
+from .snpreader import SnpReader
+from .snpdata import SnpData
 import warnings
 from pysnptools.pstreader import PstData
 from pysnptools.pstreader import _OneShot
@@ -89,7 +89,7 @@ class Dense(_OneShot,SnpReader):
         col_property = np.array([[bim[0],bim[2],bim[3]] for bim in bim_list],dtype=np.float64)
 
         val = np.zeros((len(iid),len(col)))
-        for col_index in xrange(len(col)):
+        for col_index in range(len(col)):
             val[:,col_index] = val_list_list[col_index]
 
         return PstData(iid,col,val,col_property=col_property,name=self.filename)

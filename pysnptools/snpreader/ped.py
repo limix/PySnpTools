@@ -3,8 +3,8 @@ import subprocess, sys, os.path
 from itertools import *
 import pandas as pd
 import logging
-from snpreader import SnpReader
-from snpdata import SnpData
+from .snpreader import SnpReader
+from .snpdata import SnpData
 import numpy as np
 import warnings
 from pysnptools.pstreader import _OneShot
@@ -54,7 +54,7 @@ class Ped(_OneShot,SnpReader):
         snpsstr = ped[:,6::]
         inan=snpsstr==self.missing
         snps = np.zeros((snpsstr.shape[0],snpsstr.shape[1]/2))
-        for i in xrange(snpsstr.shape[1]//2):
+        for i in range(snpsstr.shape[1]//2):
             snps[inan[:,2*i],i]=np.nan
             vals=snpsstr[~inan[:,2*i],2*i:2*(i+1)]
             snps[~inan[:,2*i],i]+=(vals==vals[0,0]).sum(1)

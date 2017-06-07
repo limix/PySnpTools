@@ -80,9 +80,9 @@ class Pheno(_OneShot, SnpReader):
             }
 
         if len(pheno_input['header']) > 0 and pheno_input['header'][0] is None:
-            pheno_input['header'] = ["pheno{0}".format(i) for i in xrange(len(pheno_input['header']))] #LATER move to reader?
+            pheno_input['header'] = ["pheno{0}".format(i) for i in range(len(pheno_input['header']))] #LATER move to reader?
         elif len(pheno_input['header']) == 0:
-            pheno_input['header'] = ["pheno{0}".format(i) for i in xrange(pheno_input['vals'].shape[1])]
+            pheno_input['header'] = ["pheno{0}".format(i) for i in range(pheno_input['vals'].shape[1])]
 
         row = pheno_input['iid']
         col = np.array(pheno_input['header'],dtype='str')
@@ -104,9 +104,9 @@ class Pheno(_OneShot, SnpReader):
         >>> Pheno.write("tempdir/toydata10.txt",snpdata)       # Write data in Pheno format
         """
         with open(filename, 'w') as f:
-            for i in xrange(snpdata.iid_count):
+            for i in range(snpdata.iid_count):
                 tmpstr = snpdata.iid[i,0] + sep + snpdata.iid[i,1]
-                for m in xrange(snpdata.sid_count):
+                for m in range(snpdata.sid_count):
                     v = snpdata.val[i,m]
                     if np.isnan(v):
                         vs = missing

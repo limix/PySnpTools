@@ -137,7 +137,7 @@ def intersect_apply(data_list, sort_by_dataset=True, intersect_before_standardiz
 
         #!!! for the case in which some of the data items don't need to change, can we avoid calling reindex? Alternatively, should the _read code notice that all the iids are the same and in the same order                    
         data_out_list = []
-        for i in xrange(indarr.shape[1]):
+        for i in range(indarr.shape[1]):
             data = data_list[i]
             iididx = indarr[:,i]
             reindex = reindex_list[i]
@@ -175,7 +175,7 @@ def _reindex_identitykernel(identitykernel, iididx, is_test=False):
     return result
 
 def _all_same(iids_list):
-    for i in xrange(len(iids_list)-1):
+    for i in range(len(iids_list)-1):
         iidA = iids_list[i]
         iidB = iids_list[i+1]
         if not np.array_equal(iidA,iidB):
@@ -206,18 +206,18 @@ def intersect_ids(idslist):
             observed[l]=1
             if first:
                 first = False
-                for i in xrange(id_list.shape[0]):
+                for i in range(id_list.shape[0]):
                     id=(id_list[i,0], id_list[i,1])
                     entry=sp.zeros(L)*sp.nan #id_list to contain the index for this id, for all lists provided
                     entry[l]=i                 #index for the first one
                     id2ind[id]=entry
             else:
-                for i in xrange(id_list.shape[0]):
+                for i in range(id_list.shape[0]):
                     id=(id_list[i,0], id_list[i,1])
-                    if id2ind.has_key(id):
+                    if id in id2ind:
                         id2ind[id][l]=i
 
-    indarr=sp.array(id2ind.values(),dtype='float')  #need float because may contain NaNs
+    indarr=sp.array(list(id2ind.values()),dtype='float')  #need float because may contain NaNs
     indarr[:,~observed]=-1                          #replace all Nan's from empty lists to -1
     inan = sp.isnan(indarr).any(1)                  #find any rows that contain at least one Nan
     indarr=indarr[~inan]                            #keep only rows that are not NaN
@@ -364,7 +364,7 @@ def create_directory_if_necessary(name, isfile=True):
     if directory_name != "":
         try:
             os.makedirs(directory_name)
-        except OSError, e:
+        except OSError as e:
             if not os.path.isdir(directory_name):
                 raise Exception("not valid path: '{0}'. (Working directory is '{1}'".format(directory_name,os.getcwd()))
 

@@ -37,7 +37,7 @@ class TestLoader(unittest.TestCase):
         snpreader_bed = Bed(bedFileName,count_A1=False)
 
         S0 = snpreader_bed.sid_count
-        snp_index_list0 = range(min(S0,15000)) 
+        snp_index_list0 = list(range(min(S0,15000))) 
 
         hdf5FileName = hdf5Pattern.format(len(snp_index_list0))
 
@@ -66,7 +66,7 @@ class TestLoader(unittest.TestCase):
         tt4 = time.time()
         logging.info("read SnpHdf5 C with reversed indexes bed %.2f seconds" % (tt4 - tt3))
 
-        print "the end"
+        print("the end")
     
 
     @classmethod
@@ -154,7 +154,7 @@ class TestLoader(unittest.TestCase):
 
     @staticmethod
     def assert_match_012_210(snpdata1, snpdata2):
-        for sid_index in xrange(snpdata1.sid_count): #Check that every row matches (except OK if 0,1,2 can be 2,1,0)
+        for sid_index in range(snpdata1.sid_count): #Check that every row matches (except OK if 0,1,2 can be 2,1,0)
             goods1 = (snpdata1.val[:,sid_index] == snpdata1.val[:,sid_index]) # find non-missing
             goods2= (snpdata2.val[:,sid_index] == snpdata2.val[:,sid_index])  # find non-missing
             assert (goods1==goods2).all() #assert that they agree on non-missing
@@ -345,9 +345,9 @@ class TestLoader(unittest.TestCase):
         iid_count = 100000
         sid_count = 50000
         from pysnptools.snpreader import SnpData
-        iid = np.array([[str(i),str(i)] for i in xrange(iid_count)])
-        sid = np.array(["sid_{0}".format(i) for i in xrange(sid_count)])
-        pos = np.array([[i,i,i] for i in xrange(sid_count)])
+        iid = np.array([[str(i),str(i)] for i in range(iid_count)])
+        sid = np.array(["sid_{0}".format(i) for i in range(sid_count)])
+        pos = np.array([[i,i,i] for i in range(sid_count)])
         np.random.seed(0)
         snpdata = SnpData(iid,sid,np.zeros((iid_count,sid_count)),pos=pos) #random.choice((0.0,1.0,2.0,float("nan")),size=(iid_count,sid_count)))
         output = "tempdir/bedbig.{0}.{1}".format(iid_count,sid_count)
@@ -491,7 +491,7 @@ class TestLoader(unittest.TestCase):
         S = snpreader2.sid_count
         N_original = snpreader2.iid_count
 
-        iid_index_list = range(N_original - 1,0,-2)
+        iid_index_list = list(range(N_original - 1,0,-2))
         snpreader3 = snpreader3[iid_index_list,:]
 
         for dtype in [sp.float64,sp.float32]:
@@ -509,7 +509,7 @@ class TestLoader(unittest.TestCase):
             self.assertTrue(np.allclose(GF, GC, rtol=1e-05, atol=1e-05))
 
             #testing selecting a subset of snps and iids
-            snp_index_list = range(S - 1,0,-2)
+            snp_index_list = list(range(S - 1,0,-2))
 
             G2x = snpreader2.read(order='F',force_python_only=True).val
             G2x = G2x[iid_index_list,:][:,snp_index_list]
@@ -556,8 +556,8 @@ class NaNCNCTestCases(unittest.TestCase):
 
         snps_to_read_count = min(S_original, 100)
 
-        for iid_index_list in [range(N_original), range(N_original/2), range(N_original - 1,0,-2)]:
-            for snp_index_list in [range(snps_to_read_count), range(snps_to_read_count/2), range(snps_to_read_count - 1,0,-2)]:
+        for iid_index_list in [list(range(N_original)), list(range(N_original/2)), list(range(N_original - 1,0,-2))]:
+            for snp_index_list in [list(range(snps_to_read_count)), list(range(snps_to_read_count/2)), list(range(snps_to_read_count - 1,0,-2))]:
                 for standardizer in [Unit(),Beta(1,25)]:
                     reference_snps, reference_dtype = NaNCNCTestCases(iid_index_list, snp_index_list, standardizer, snp_reader_factory_bed(), sp.float64, "C", "False", None, None).read_and_standardize()
                     for snpreader_factory in [snp_reader_factory_bed, 

@@ -3,7 +3,7 @@ import subprocess, sys, os.path
 from itertools import *
 import pandas as pd
 import logging
-from kernelreader import KernelReader
+from .kernelreader import KernelReader
 from pysnptools.pstreader import PstData
 from pysnptools.pstreader import PstReader
 

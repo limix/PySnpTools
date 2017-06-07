@@ -3,8 +3,8 @@ import subprocess, sys, os.path
 from itertools import *
 import pandas as pd
 import logging
-from snpreader import SnpReader
-from snpdata import SnpData
+from .snpreader import SnpReader
+from .snpdata import SnpData
 import math
 import warnings
 from pysnptools.pstreader import PstData
@@ -185,15 +185,15 @@ class Bed(SnpReader):
                 bed_filepointer.write(chr(0b00011011)) #magic numbers
                 bed_filepointer.write(chr(0b00000001)) #snp major
 
-                for sid_index in xrange(snpdata.sid_count):
+                for sid_index in range(snpdata.sid_count):
                     if sid_index % 1 == 0:
                         logging.info("Writing snp # {0} to file '{1}'".format(sid_index, filename))
 
                     col = snpdata.val[:, sid_index]
-                    for iid_by_four in xrange(0,snpdata.iid_count,4):
+                    for iid_by_four in range(0,snpdata.iid_count,4):
                         vals_for_this_byte = col[iid_by_four:iid_by_four+4]
                         byte = 0b00000000
-                        for val_index in xrange(len(vals_for_this_byte)):
+                        for val_index in range(len(vals_for_this_byte)):
                             val = vals_for_this_byte[val_index]
                             if val == 0:
                                 code = zero_code
@@ -225,14 +225,14 @@ class Bed(SnpReader):
             iid_index_out = iid_index_or_none
         else:
             iid_count_out = iid_count_in
-            iid_index_out = range(iid_count_in)
+            iid_index_out = list(range(iid_count_in))
 
         if sid_index_or_none is not None:
             sid_count_out = len(sid_index_or_none)
             sid_index_out = sid_index_or_none
         else:
             sid_count_out = sid_count_in
-            sid_index_out = range(sid_count_in)
+            sid_index_out = list(range(sid_count_in))
 
         if not force_python_only:
             from pysnptools.snpreader import wrap_plink_parser

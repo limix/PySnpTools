@@ -447,7 +447,7 @@ class PstReader(object):
         >>> # print np.may_share_memory(subset_snpdata.val, subsub_snpdata.val) # Do the two ndarray's share memory? They could. Currently they won't.       
         """
         val = self._read(None, None, order, dtype, force_python_only, view_ok)
-        from pstdata import PstData
+        from .pstdata import PstData
         ret = PstData(self.row, self.col, val, row_property=self.row_property, col_property=self.col_property, name=str(self))
         return ret
 
@@ -472,7 +472,7 @@ class PstReader(object):
             self._row_to_index = {}
             for index, item in enumerate(self.row):
                 key = PstReader._makekey(item)
-                if self._row_to_index.has_key(key):
+                if key in self._row_to_index:
                    raise Exception("Expect row to appear in data only once. ({0})".format(key))
                 self._row_to_index[key] = index
         index = np.fromiter((self._row_to_index[PstReader._makekey(item1)] for item1 in list),np.int)
@@ -516,7 +516,7 @@ class PstReader(object):
 
     @staticmethod
     def _makekey(item):
-        if isinstance(item,(str,int,long,float)): #return quickly from known items
+        if isinstance(item,(str,int,float)): #return quickly from known items
             return item
         try:
             hash(item)
@@ -569,7 +569,7 @@ class PstReader(object):
     @staticmethod
     def _make_sparray_from_sparray_or_slice(count, indexer):
         if isinstance(indexer,slice):
-            return apply(np.arange, indexer.indices(count))
+            return np.arange(*indexer.indices(count))
         return indexer
 
     @staticmethod
@@ -625,4 +625,4 @@ if __name__ == "__main__":
     import doctest
     doctest.testmod()
     # There is also a unit test case in 'pysnptools\test.py' that calls this doc test
-    print "done"
+    print("done")

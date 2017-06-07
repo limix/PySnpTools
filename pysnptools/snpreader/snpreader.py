@@ -453,7 +453,7 @@ class SnpReader(PstReader):
         >>> # print np.may_share_memory(subset_snpdata.val, subsub_snpdata.val) # Do the two ndarray's share memory? They could. Currently they won't.       
         """
         val = self._read(None, None, order, dtype, force_python_only, view_ok)
-        from snpdata import SnpData
+        from .snpdata import SnpData
         ret = SnpData(self.iid,self.sid,val,pos=self.pos,name=str(self))
         return ret
 
@@ -601,7 +601,7 @@ class SnpReader(PstReader):
             ct = 0
             ts = time.time()
 
-            for start in xrange(0, self.sid_count, block_size):
+            for start in range(0, self.sid_count, block_size):
                 ct += block_size
                 train_data,trained_standardizer = SnpReader._as_snpdata(self[:,start:start+block_size],standardizer=standardizer,dtype=dtype,force_python_only=force_python_only)
                 trained_standardizer_list.append(trained_standardizer)
@@ -683,4 +683,4 @@ if __name__ == "__main__":
     import doctest
     doctest.testmod()
     # There is also a unit test case in 'pysnptools\test.py' that calls this doc test
-    print "done"
+    print("done")

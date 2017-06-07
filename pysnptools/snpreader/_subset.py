@@ -1,4 +1,4 @@
-from snpreader import SnpReader
+from .snpreader import SnpReader
 from pysnptools.pstreader._subset import _PstSubset
 
 class _SnpSubset(_PstSubset,SnpReader):

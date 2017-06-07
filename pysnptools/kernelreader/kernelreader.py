@@ -276,7 +276,7 @@ class KernelReader(PstReader):
         >>> #print np.may_share_memory(subset_kerneldata.val, subsub_kerneldata.val) # Do the two ndarray's share memory? They could. Currently they won't.       
         """
         val = self._read(None, None, order, dtype, force_python_only, view_ok)
-        from kerneldata import KernelData
+        from .kerneldata import KernelData
         ret = KernelData(iid0=self.iid0, iid1=self.iid1, val=val, name=str(self))
         return ret
 
@@ -341,4 +341,4 @@ if __name__ == "__main__":
     import doctest
     doctest.testmod()
     # There is also a unit test case in 'pysnptools\test.py' that calls this doc test
-    print "done"
+    print("done")

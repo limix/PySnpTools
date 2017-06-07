@@ -5,8 +5,8 @@ except:
 
 import logging
 import scipy as np
-from pstreader import PstReader
-from pstdata import PstData
+from .pstreader import PstReader
+from .pstdata import PstData
 import warnings
 
 class PstHdf5(PstReader):
@@ -74,7 +74,7 @@ class PstHdf5(PstReader):
         for vocab in vocab_list:
             if all((key is None or key in self._h5) for key in vocab):
                 return vocab
-        raise Exception("Don't know how to read HDF5 with these keys: " + ",".join(self._h5.iterkeys()))
+        raise Exception("Don't know how to read HDF5 with these keys: " + ",".join(iter(self._h5.keys())))
 
 
     def _run_once(self):
@@ -82,7 +82,7 @@ class PstHdf5(PstReader):
             return
         try:
             self._h5 = h5py.File(self.filename, "r")
-        except IOError, e:
+        except IOError as e:
             raise IOError("Missing or unopenable file '{0}' -- Native error message: {1}".format(self.filename,e))
 
         row_key,col_key,val_key,row_property_key,col_property_key = self._find_vocab()
@@ -116,7 +116,7 @@ class PstHdf5(PstReader):
     def _is_sorted_without_repeats(list):
         if len(list) < 2:
             return True
-        for i in xrange(1,len(list)):
+        for i in range(1,len(list)):
             if not list[i-1] < list[i]:
                 return False
         return True
@@ -163,7 +163,7 @@ class PstHdf5(PstReader):
                 row_index_list = row_index_list.tolist()
         else:
             row_index_count = self.row_count
-            row_index_list = range(self.row_count)
+            row_index_list = list(range(self.row_count))
             row_is_sorted = True
 
         if col_index_or_none is not None:
@@ -173,7 +173,7 @@ class PstHdf5(PstReader):
                 col_index_list = col_index_list.tolist()
         else:
             col_index_count = self.col_count
-            col_index_list = range(self.col_count)
+            col_index_list = list(range(self.col_count))
         #Check if snps and iids indexes are in order and in range
         col_are_sorted = PstHdf5._is_sorted_without_repeats(col_index_list)
 
@@ -210,7 +210,7 @@ class PstHdf5(PstReader):
                 col_index_index_list = np.arange(col_index_count)
                 col_index_list_sorted = col_index_list
 
-            for start in xrange(0, col_index_count, block_size):
+            for start in range(0, col_index_count, block_size):
                 #print start
                 stop = min(start+block_size,col_index_count)
                 if stop-start < block_size:  #On the last loop, the buffer might be too big, so make it smaller
