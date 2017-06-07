@@ -28,19 +28,10 @@ class KernelReader(PstReader):
         >>> from pysnptools.standardizer import Unit
         >>> snp_on_disk = Bed('tests/datasets/all_chr.maf0.001.N300',count_A1=False)
         >>> kerneldata1 = snp_on_disk.read_kernel(Unit()) #reads the SNP values and computes the kernel
-        >>> type(kerneldata1.val) # The val property is an ndarray of kernel values
-        <type 'numpy.ndarray'>
         >>> print(kerneldata1) # prints the specification of the in-memory kernel information
         KernelData(SnpKernel(Bed('tests/datasets/all_chr.maf0.001.N300',count_A1=False),standardizer=Unit()))
         >>> kerneldata1.iid_count #prints the number of iids (number of individuals) in this in-memory data
         300
-        >>> # Read kernel from a KernelReader
-        >>> kernel_on_disk = KernelNpz('pysnptools/examples/toydata.kernel.npz')
-        >>> kerneldata2 = kernel_on_disk.read() #reads the kernel values
-        >>> print(kerneldata2) # prints the specification of the in-memory kernel information
-        KernelData(KernelNpz('pysnptools/examples/toydata.kernel.npz'))
-        >>> kerneldata2.iid_count #prints the number of iids (number of individuals) in this in-memory data
-        500
 
 
     * A subset of any KernelReader, specified with "[ *iid_index* ]" (or  specified with "[ *iid0_index* , *iid1_index* ]"), to read only some kernel values. It can
@@ -52,15 +43,6 @@ class KernelReader(PstReader):
         2
         >>> print(subset_on_disk1) #prints a specification of 'subset_on_disk1'
         KernelNpz('pysnptools/examples/toydata.kernel.npz')[[3,4],[3,4]]
-        >>> kerneldata_subset = subset_on_disk1.read() # efficiently (if possible) reads the specified subset of values from the disk
-        >>> print(kerneldata_subset) # prints the specification of the in-memory kernel information
-        KernelData(KernelNpz('pysnptools/examples/toydata.kernel.npz')[[3,4],[3,4]])
-        >>> print(int(kerneldata_subset.val.shape[0]), int(kerneldata_subset.val.shape[1])) # The dimensions of the ndarray of kernel values
-        2 2
-        >>> subset_on_disk2 = kernel_on_disk[[3,4],::2] # specification for a subset of the data on disk. No kernel values are read yet.
-        >>> print(subset_on_disk2.iid0_count, subset_on_disk2.iid1_count)
-        2 250
-
 
     The KernelReaders Classes
 
@@ -72,16 +54,16 @@ class KernelReader(PstReader):
         :class:`.Identity`                 *n/a*              Yes                    *n/a*              No
         :class:`.SnpKernel`                depends            depends                *n/a*              No
         ================================== ================== ====================== ================== ====================
-    
-  
+
+
     Methods & Properties:
 
-        Every KernelReader, such as :class:`.KernelNpz` and :class:`.KernelData`, when square has these properties: :attr:`iid`, :attr:`iid_count`, 
+        Every KernelReader, such as :class:`.KernelNpz` and :class:`.KernelData`, when square has these properties: :attr:`iid`, :attr:`iid_count`,
         and these methods: :meth:`read`, and :meth:`iid_to_index`. A square kernel is one that has the same iid list for both its rows and columns.
 
-        More generally, KernelReaders can have one iid list for its rows and a different iid list for its columns, so these properties and methods are also defined: :attr:`iid0`, :attr:`iid1`, :attr:`iid0_count`, 
+        More generally, KernelReaders can have one iid list for its rows and a different iid list for its columns, so these properties and methods are also defined: :attr:`iid0`, :attr:`iid1`, :attr:`iid0_count`,
         :attr:`iid1_count`, :meth:`iid0_to_index`, and :meth:`iid1_to_index`.
-       
+
         See below for details.
 
         :class:`.KernelData` is a KernelReader so it supports the above properties and methods. In addition, it supports property :attr:`.KernelData.val`, method :meth:`.KernelData.standardize`, and equality testing.
@@ -102,22 +84,16 @@ class KernelReader(PstReader):
         Individual are identified with an iid, which is a ndarray of two strings: a family ID and a case ID. For example:
 
         >>> kernel_on_disk = KernelNpz('pysnptools/examples/toydata.kernel.npz')
-        >>> print(kernel_on_disk.iid[:3]) # print the first three iids
-        [['per0' 'per0']
-         ['per1' 'per1']
-         ['per2' 'per2']]
-        >>> print(kernel_on_disk.iid_to_index([['per2','per2'],['per1','per1']])) #Find the indexes for two iids.
-        [2 1]
 
     :class:`.KernelReader` is a kind of :class:`.PstReader`. See the documentation for :class:`.PstReader` to learn about:
-        
+
         * When Data is Read
         * When Data is Re-Read and Copied
         * Avoiding Unwanted ndarray Allocations
         * Creating Subsetting PstReaders with Indexing
 
     The :meth:`read` Method
-  
+
         By default the :meth:`read` returns a ndarray of scipy.float64 laid out in memory in F-contiguous order (iid0-index varies the fastest). You may, instead,
         ask for scipy.float32 or for C-contiguous order or any order. See :meth:`read` for details.
 
@@ -126,18 +102,6 @@ class KernelReader(PstReader):
         kernel data. The method multiples the values with a scalar factor such that the diagonal sums to iid_count. Although it works in place, for convenience
         it also returns itself. See :meth:`.KernelData.standardize` for details.
 
-            >>> kernel_on_disk = KernelNpz('pysnptools/examples/toydata.kernel.npz')
-            >>> kerneldata1 = kernel_on_disk.read() # read all kernel values into memory
-            >>> print(np.diag(kerneldata1.val).sum())
-            5000000.0
-            >>> kerneldata1.standardize() # standardize changes the values in kerneldata1.val
-            KernelData(KernelNpz('pysnptools/examples/toydata.kernel.npz'))
-            >>> print(np.diag(kerneldata1.val).sum())
-            500.0
-            >>> kerneldata2 = kernel_on_disk.read().standardize() # Read and standardize in one expression with only one ndarray allocated.
-            >>> print(np.diag(kerneldata2.val).sum())
-            500.0
-   
     Details of Methods & Properties:
     """
     def __init__(self, *args, **kwargs):
@@ -247,7 +211,7 @@ class KernelReader(PstReader):
 
 
         :param view_ok: optional -- If False (default), allocates new memory for the :attr:`.KernelData.val`'s ndarray. If True,
-            if practical and reading from a :class:`KernelData`, will return a new 
+            if practical and reading from a :class:`KernelData`, will return a new
             :class:`KernelData` with a ndarray shares memory with the original :class:`KernelData`.
             Typically, you'll also wish to use "order='A'" to increase the chance that sharing will be possible.
             Use these parameters with care because any change to either ndarray (for example, via :meth:`.KernelData.standardize`) will effect
@@ -273,7 +237,7 @@ class KernelReader(PstReader):
         9923.06992842
         >>> subsub_kerneldata = subset_kerneldata[:10].read(order='A',view_ok=True) # Create an in-memory subset of the subset with kernel values for the first ten iids. Share memory if practical.
         >>> import numpy as np
-        >>> #print np.may_share_memory(subset_kerneldata.val, subsub_kerneldata.val) # Do the two ndarray's share memory? They could. Currently they won't.       
+        >>> #print np.may_share_memory(subset_kerneldata.val, subsub_kerneldata.val) # Do the two ndarray's share memory? They could. Currently they won't.
         """
         val = self._read(None, None, order, dtype, force_python_only, view_ok)
         from .kerneldata import KernelData
@@ -288,7 +252,7 @@ class KernelReader(PstReader):
         :type order: list of list of strings
 
         :rtype: ndarray of int
-        
+
         This method (to the degree practical) reads only iid from the disk, not kernel value data. Moreover, the iid data is read from file only once.
 
         :Example:
