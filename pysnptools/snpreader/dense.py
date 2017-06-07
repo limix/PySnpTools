@@ -1,7 +1,7 @@
 import numpy as np
 import logging
-from snpreader import SnpReader
-from snpdata import SnpData
+from .snpreader import SnpReader
+from .snpdata import SnpData
 import warnings
 from pysnptools.pstreader import PstData
 from pysnptools.pstreader import _OneShot
@@ -52,8 +52,8 @@ class Dense(_OneShot,SnpReader):
         :Example:
 
         >>> from pysnptools.snpreader import Dense
-        >>> data_on_disk = Dense('../examples/toydata100.dense.txt')
-        >>> print data_on_disk.iid_count, data_on_disk.sid_count
+        >>> data_on_disk = Dense('pysnptools/examples/toydata100.dense.txt')
+        >>> print(data_on_disk.iid_count, data_on_disk.sid_count)
         500 100
 
     **Methods beyond** :class:`.SnpReader`
@@ -74,7 +74,7 @@ class Dense(_OneShot,SnpReader):
         with open(self.filename,"r") as fp:
             header = fp.readline()
             iid_string_list = header.strip().split()[1:]
-            iid = np.array([self.extract_iid_function(iid_string) for iid_string in iid_string_list],dtype="string")
+            iid = np.array([self.extract_iid_function(iid_string) for iid_string in iid_string_list],dtype=str)
             val_list = []
             for line_index,line in enumerate(fp):
                 if line_index % 1000 == 0:
@@ -89,7 +89,7 @@ class Dense(_OneShot,SnpReader):
         col_property = np.array([[bim[0],bim[2],bim[3]] for bim in bim_list],dtype=np.float64)
 
         val = np.zeros((len(iid),len(col)))
-        for col_index in xrange(len(col)):
+        for col_index in range(len(col)):
             val[:,col_index] = val_list_list[col_index]
 
         return PstData(iid,col,val,col_property=col_property,name=self.filename)
@@ -111,14 +111,14 @@ class Dense(_OneShot,SnpReader):
 
         >>> from pysnptools.snpreader import Dense, Bed
         >>> import pysnptools.util as pstutil
-        >>> snpdata = Bed('../examples/toydata.bed',count_A1=False)[:,:10].read()  # Read first 10 snps from Bed format
+        >>> snpdata = Bed('pysnptools/examples/toydata.bed',count_A1=False)[:,:10].read()  # Read first 10 snps from Bed format
         >>> pstutil.create_directory_if_necessary("tempdir/toydata10.dense.txt")
         >>> Dense.write("tempdir/toydata10.dense.txt",snpdata)        # Write data in Dense format
         """
 
         if isinstance(filename,SnpData) and isinstance(snpdata,str): #For backwards compatibility, reverse inputs if necessary
             warnings.warn("write statement should have filename before data to write", DeprecationWarning)
-            filename, snpdata = snpdata, filename 
+            filename, snpdata = snpdata, filename
 
         snpsarray = snpdata.val
         with open(filename,"w") as filepointer:

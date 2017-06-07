@@ -3,8 +3,8 @@ import subprocess, sys, os.path
 from itertools import *
 import pandas as pd
 import logging
-from snpreader import SnpReader
-from snpdata import SnpData
+from .snpreader import SnpReader
+from .snpdata import SnpData
 import numpy as np
 import warnings
 from pysnptools.pstreader import _OneShot
@@ -17,8 +17,8 @@ class Ped(_OneShot,SnpReader):
 
     This format is described in http://pngu.mgh.harvard.edu/~purcell/plink/data.shtml#ped and looks like::
 
-         FAM001  1  0 0  1  2  A A  G G  A C 
-         FAM001  2  0 0  1  2  A A  A G  0 0 
+         FAM001  1  0 0  1  2  A A  G G  A C
+         FAM001  2  0 0  1  2  A A  A G  0 0
          ...
 
     the direction of the encoding from allele pair to 0,1,2 is arbitrary. That is, if the alleles are "A" and "G", then "G G" could be 0 and "A A" could be 2 or visa versa. The pair "A G" will always be 1.
@@ -31,8 +31,8 @@ class Ped(_OneShot,SnpReader):
         :Example:
 
         >>> from pysnptools.snpreader import Ped
-        >>> data_on_disk = Ped('../examples/toydata.ped')
-        >>> print data_on_disk.iid_count, data_on_disk.sid_count
+        >>> data_on_disk = Ped('pysnptools/examples/toydata.ped')
+        >>> print(data_on_disk.iid_count, data_on_disk.sid_count)
         500 10000
 
     **Methods beyond** :class:`.SnpReader`
@@ -53,8 +53,8 @@ class Ped(_OneShot,SnpReader):
         row = ped[:,0:2]
         snpsstr = ped[:,6::]
         inan=snpsstr==self.missing
-        snps = np.zeros((snpsstr.shape[0],snpsstr.shape[1]/2))
-        for i in xrange(snpsstr.shape[1]//2):
+        snps = np.zeros((snpsstr.shape[0], int(snpsstr.shape[1]/2)))
+        for i in range(snpsstr.shape[1]//2):
             snps[inan[:,2*i],i]=np.nan
             vals=snpsstr[~inan[:,2*i],2*i:2*(i+1)]
             snps[~inan[:,2*i],i]+=(vals==vals[0,0]).sum(1)
@@ -79,14 +79,14 @@ class Ped(_OneShot,SnpReader):
 
         >>> from pysnptools.snpreader import Ped, Bed
         >>> import pysnptools.util as pstutil
-        >>> snpdata = Bed('../examples/toydata.bed',count_A1=False)[:,:10].read()  # Read first 10 snps from Bed format
+        >>> snpdata = Bed('pysnptools/examples/toydata.bed',count_A1=False)[:,:10].read()  # Read first 10 snps from Bed format
         >>> pstutil.create_directory_if_necessary("tempdir/toydata10.ped")
         >>> Ped.write("tempdir/toydata10.ped",snpdata)            # Write data in Ped format
         """
 
         if isinstance(filename,SnpData) and isinstance(snpdata,str): #For backwards compatibility, reverse inputs if necessary
             warnings.warn("write statement should have filename before data to write", DeprecationWarning)
-            filename, snpdata = snpdata, filename 
+            filename, snpdata = snpdata, filename
 
         SnpReader._write_map_or_bim(snpdata, filename, remove_suffix="ped", add_suffix="map")
 

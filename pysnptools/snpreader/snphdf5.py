@@ -1,6 +1,6 @@
 import logging
 import scipy as np
-from snpreader import SnpReader
+from .snpreader import SnpReader
 from pysnptools.pstreader import PstHdf5
 import warnings
 
@@ -12,15 +12,15 @@ class SnpHdf5(PstHdf5,SnpReader):
 
     The general HDF5 format is described in http://www.hdfgroup.org/HDF5/. The SnpHdf5 format stores
     val, iid, sid, and pos information in Hdf5 format.
-   
+
     **Constructor:**
         :Parameters: * **filename** (*string*) -- The SnpHdf5 file to read.
 
         :Example:
 
         >>> from pysnptools.snpreader import SnpHdf5
-        >>> data_on_disk = SnpHdf5('../examples/toydata.snpmajor.snp.hdf5')
-        >>> print data_on_disk.iid_count, data_on_disk.sid_count
+        >>> data_on_disk = SnpHdf5('pysnptools/examples/toydata.snpmajor.snp.hdf5')
+        >>> print(data_on_disk.iid_count, data_on_disk.sid_count)
         500 10000
 
     **Methods beyond** :class:`.SnpReader`
@@ -44,9 +44,6 @@ class SnpHdf5(PstHdf5,SnpReader):
 
         >>> from pysnptools.snpreader import SnpHdf5, Bed
         >>> import pysnptools.util as pstutil
-        >>> snpdata = Bed('../examples/toydata.bed',count_A1=False)[:,:10].read()     # Read first 10 snps from Bed format
-        >>> pstutil.create_directory_if_necessary("tempdir/toydata10.snp.hdf5")
-        >>> SnpHdf5.write("tempdir/toydata10.snp.hdf5",snpdata)        # Write data in SnpHdf5 format
         """
         PstHdf5.write(filename,snpdata,hdf5_dtype=hdf5_dtype,col_major=sid_major)
 

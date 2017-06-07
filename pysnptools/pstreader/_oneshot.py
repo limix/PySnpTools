@@ -3,8 +3,8 @@ import subprocess, sys, os.path
 from itertools import *
 import pandas as pd
 import logging
-from pstreader import PstReader
-from pstdata import PstData
+from .pstreader import PstReader
+from .pstdata import PstData
 import pysnptools.util as pstutil
 import warnings
 

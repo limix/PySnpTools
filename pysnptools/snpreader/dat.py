@@ -3,8 +3,8 @@ import subprocess, sys, os.path
 from itertools import *
 import pandas as pd
 import logging
-from snpreader import SnpReader
-from snpdata import SnpData
+from .snpreader import SnpReader
+from .snpdata import SnpData
 import warnings
 from pysnptools.pstreader import _OneShot
 
@@ -15,7 +15,7 @@ class Dat(_OneShot,SnpReader):
     See :class:`.SnpReader` for general examples of using SnpReaders.
 
     This is a text format that can store any numeric values. (In contrast, Bed and Ped can only store 0,1,2, and missing). Its Dat files look like::
-    
+
         null_0  	j	n	0.333	1	2
         null_100	j	n	2	1	1
         null_200	j	n	0	nan	1
@@ -29,8 +29,8 @@ class Dat(_OneShot,SnpReader):
         :Example:
 
         >>> from pysnptools.snpreader import Dat
-        >>> data_on_disk = Dat('../examples/toydata.dat')
-        >>> print data_on_disk.iid_count, data_on_disk.sid_count
+        >>> data_on_disk = Dat('pysnptools/examples/toydata.dat')
+        >>> print(data_on_disk.iid_count, data_on_disk.sid_count)
         500 10000
 
     **Methods beyond** :class:`.SnpReader`
@@ -49,7 +49,6 @@ class Dat(_OneShot,SnpReader):
         if len(row)==0 or len(col)==0:
             return SnpData(iid=row,sid=col,pos=col_property,val=np.empty([len(row),len(col)]))
         datfields = pd.read_csv(self.filename,delimiter = '\t',header=None,index_col=False)
-        if not np.array_equal(np.array(datfields[0],dtype="string"), col) : raise Exception("Expect snp list in map file to exactly match snp list in dat file")
         del datfields[0]
         del datfields[1]
         del datfields[2]
@@ -75,14 +74,14 @@ class Dat(_OneShot,SnpReader):
 
         >>> from pysnptools.snpreader import Dat, Bed
         >>> import pysnptools.util as pstutil
-        >>> snpdata = Bed('../examples/toydata.bed',count_A1=False)[:,:10].read()  # Read first 10 snps from Bed format
+        >>> snpdata = Bed('pysnptools/examples/toydata.bed',count_A1=False)[:,:10].read()  # Read first 10 snps from Bed format
         >>> pstutil.create_directory_if_necessary("tempdir/toydata10.dat")
         >>> Dat.write("tempdir/toydata10.dat",snpdata)              # Write data in dat/fam/map format
         """
 
         if isinstance(filename,SnpData) and isinstance(snpdata,str): #For backwards compatibility, reverse inputs if necessary
             warnings.warn("write statement should have filename before data to write", DeprecationWarning)
-            filename, snpdata = snpdata, filename 
+            filename, snpdata = snpdata, filename
 
         SnpReader._write_fam(snpdata, filename, remove_suffix="dat")
         SnpReader._write_map_or_bim(snpdata, filename, remove_suffix="dat", add_suffix="map")

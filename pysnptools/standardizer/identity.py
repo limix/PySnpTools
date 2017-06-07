@@ -11,11 +11,11 @@ class Identity(Standardizer):
 
     >>> from pysnptools.standardizer import Identity
     >>> from pysnptools.snpreader import Bed
-    >>> snpdata1 = Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False).read()
-    >>> print snpdata1.val[0,0]
+    >>> snpdata1 = Bed('tests/datasets/all_chr.maf0.001.N300',count_A1=False).read()
+    >>> print(snpdata1.val[0,0])
     2.0
     >>> snpdata1 = snpdata1.standardize(Identity())
-    >>> print snpdata1.val[0,0]
+    >>> print(snpdata1.val[0,0])
     2.0
     '''
 

@@ -14,7 +14,7 @@ class TestLoader(unittest.TestCase):
     def test_big_npz(self):
         logging.info("in test_big_npz")
         n = 1000
-        pstdata = PstData(row=xrange(n-1),col=xrange(n+1),val=np.zeros([n-1,n+1]))
+        pstdata = PstData(row=range(n-1),col=range(n+1),val=np.zeros([n-1,n+1]))
         output = "tempdir/pstreader/big.npz"
         create_directory_if_necessary(output)
         PstNpz.write(output,pstdata)
@@ -23,30 +23,30 @@ class TestLoader(unittest.TestCase):
         pstdata2 = pstnpz.read(order='A')
         assert pstdata2.val.flags['C_CONTIGUOUS']
 
-        pstdata = PstData(row=xrange(n-1),col=xrange(n+1),val=np.zeros([n-1,n+1],order='F'))
+        pstdata = PstData(row=range(n-1),col=range(n+1),val=np.zeros([n-1,n+1],order='F'))
         PstNpz.write(output,pstdata)
         pstnpz = PstNpz(output)
         pstdata2 = pstnpz.read(order='A')
         pstdata2.val.flags['F_CONTIGUOUS']
 
-        print "done"
+        print("done")
 
     def test_writes(self):
         #===================================
         #    Defining sub functions
         #===================================
         def _oned_int(c):
-            return range(c)
+            return list(range(c))
         def _oned_str(c):
-            return [str(i) for i in xrange(c)]
+            return [str(i) for i in range(c)]
         def _twooned_int(c):
-            return [[i] for i in xrange(c)]
+            return [[i] for i in range(c)]
         def _twooned_str(c):
-            return [[str(i)] for i in xrange(c)]
+            return [[str(i)] for i in range(c)]
         def _twotwod_int(c):
-            return [[i,i] for i in xrange(c)]
+            return [[i,i] for i in range(c)]
         def _twotwod_str(c):
-            return [[str(i),"hello"] for i in xrange(c)]
+            return [[str(i),"hello"] for i in range(c)]
         def _none(c):
             return None
         def _zero(c):

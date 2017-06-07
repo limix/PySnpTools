@@ -12,25 +12,25 @@ class Standardizer(object):
 
     >>> from pysnptools.standardizer import Unit
     >>> from pysnptools.snpreader import Bed
-    >>> snpdata1 = Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False).read().standardize(Unit())
-    >>> print snpdata1.val[0,0]
+    >>> snpdata1 = Bed('tests/datasets/all_chr.maf0.001.N300',count_A1=False).read().standardize(Unit())
+    >>> print(snpdata1.val[0,0])
     0.229415733871
 
     Create a kernel from SNP data on disk.
 
-    >>> kerneldata = Bed('../examples/toydata.bed',count_A1=False).read_kernel(Unit())
-    >>> print kerneldata.val[0,0]
+    >>> kerneldata = Bed('pysnptools/examples/toydata.bed',count_A1=False).read_kernel(Unit())
+    >>> print(kerneldata.val[0,0])
     9923.06992842
 
 
     Can also return a constant SNP standardizer that can be applied to other :class:`.SnpData`.
 
-    >>> snp_whole = Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False)
+    >>> snp_whole = Bed('tests/datasets/all_chr.maf0.001.N300',count_A1=False)
     >>> train_idx, test_idx = range(10,snp_whole.iid_count), range(0,10) #test on the first 10, train on the rest
     >>> snp_train, trained_standardizer = Unit().standardize(snp_whole[train_idx,:].read(),return_trained=True)
-    >>> print snp_train.val[0,0]
+    >>> print(snp_train.val[0,0])
     0.233549683248
-    >>> print trained_standardizer.stats[0,:] #The mean and stddev of the 1st SNP on the training data
+    >>> print(trained_standardizer.stats[0,:]) #The mean and stddev of the 1st SNP on the training data
     [ 1.94827586  0.22146953]
     >>> snp_test = snp_whole[test_idx,:].read().standardize(trained_standardizer)
     >>> snp_test.val[0,0]
@@ -38,11 +38,11 @@ class Standardizer(object):
 
     Standardize any Numpy array.
 
-    >>> val = Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False).read().val
-    >>> print val[0,0]
+    >>> val = Bed('tests/datasets/all_chr.maf0.001.N300',count_A1=False).read().val
+    >>> print(val[0,0])
     2.0
     >>> val = Unit().standardize(val)
-    >>> print val[0,0]
+    >>> print(val[0,0])
     0.229415733871
 
     Details of Methods & Properties:
