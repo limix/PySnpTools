@@ -30,7 +30,7 @@ class Dat(_OneShot,SnpReader):
 
         >>> from pysnptools.snpreader import Dat
         >>> data_on_disk = Dat('../examples/toydata.dat')
-        >>> print data_on_disk.iid_count, data_on_disk.sid_count
+        >>> print(data_on_disk.iid_count,) data_on_disk.sid_count
         500 10000
 
     **Methods beyond** :class:`.SnpReader`

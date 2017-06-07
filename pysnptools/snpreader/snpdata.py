@@ -28,7 +28,7 @@ class SnpData(PstData,SnpReader):
 
         >>> from pysnptools.snpreader import SnpData
         >>> snpdata = SnpData(iid=[['fam0','iid0'],['fam0','iid1']], sid=['snp334','snp349','snp921'], val=[[0.,2.,0.],[0.,1.,2.]])
-        >>> print snpdata.val[0,1], snpdata.iid_count, snpdata.sid_count
+        >>> print(snpdata.val[0,1], snpdata.iid_count,) snpdata.sid_count
         2.0 2 3
 
     **Equality:**
@@ -41,13 +41,13 @@ class SnpData(PstData,SnpReader):
         >>> from pysnptools.snpreader import SnpData
         >>> snpdata1 = SnpData(iid=[['fam0','iid0'],['fam0','iid1']], sid=['snp334','snp349','snp921'], val=[[0.,2.,0.],[0.,1.,2.]], pos=[[0,0,0],[0,0,0],[0,0,0]])
         >>> snpdata2 = SnpData(iid=[['fam0','iid0'],['fam0','iid1']], sid=['snp334','snp349','snp921'], val=[[0.,2.,0.],[0.,1.,2.]], pos=[[0,0,0],[0,0,0],[0,0,0]])
-        >>> print snpdata1 == snpdata2 #True, because all the arrays have the same values.
+        >>> print(snpdata1 == snpdata2) #True, because all the arrays have the same values.
         True
-        >>> print snpdata1.val is snpdata2.val #False, because the two arrays have different memory.
+        >>> print(snpdata1.val is snpdata2.val) #False, because the two arrays have different memory.
         False
         >>> snpdata3 = SnpData(iid=[['a','0'],['b','0']], sid=['snp334','snp349','snp921'], val=[[0.,2.,0.],[0.,1.,2.]], pos=[[0,0,0],[0,0,0],[0,0,0]])
         >>> snpdata4 = SnpData(iid=[['fam0','iid0'],['fam0','iid1']], sid=['snp334','snp349','snp921'], val=[[0.,2.,0.],[0.,1.,2.]], pos=[[0,0,0],[0,0,0],[0,0,0]])
-        >>> print snpdata3 == snpdata4 #False, because the iids are different.
+        >>> print(snpdata3 == snpdata4) #False, because the iids are different.
         False
 
     **Methods beyond** :class:`.SnpReader`
@@ -72,7 +72,7 @@ class SnpData(PstData,SnpReader):
 
     >>> from pysnptools.snpreader import Bed
     >>> snpdata = Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False)[:5,:].read() #read data for first 5 iids
-    >>> print snpdata.val[4,100] #print one of the SNP values
+    >>> print(snpdata.val[4,100]) #print one of the SNP values
     2.0
     """
 
@@ -114,7 +114,7 @@ class SnpData(PstData,SnpReader):
         >>> from pysnptools.snpreader import Bed
         >>> snp_on_disk = Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False) # Specify some data on disk in Bed format
         >>> snpdata1 = snp_on_disk.read() # read all SNP values into memory
-        >>> print snpdata1 # Prints the specification for this SnpData
+        >>> print(snpdata1) # Prints the specification for this SnpData
         SnpData(Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False))
         >>> print snpdata1.val[0,0]
         2.0

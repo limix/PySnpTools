@@ -27,7 +27,7 @@ class Identity(KernelReader):
          [ 0.  1.]]
 
         >>> identity = Identity(iid=[['fam0','iid0'],['fam0','iid1'],['fam0','iid2']],test=[['fam0','iid1'],['fam0','iid3']])
-        >>> print identity.iid0_count, identity.iid1_count
+        >>> print(identity.iid0_count,) identity.iid1_count
         3 2
         >>> print identity.read().val
         [[ 0.  0.]

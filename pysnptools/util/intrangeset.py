@@ -36,7 +36,7 @@ class IntRangeSet(object):
     >>> trans_start = int(trans_start)
     >>> trans_stop = int(trans_last) + 1 # add one to convert the inclusive "last" value into a Pythonesque exclusive "stop" value
     >>> int_range_set = IntRangeSet((trans_start,trans_stop)) # creates a IntRangeSet from 29370 (inclusive) to 37381 (exclusive)
-    >>> print int_range_set # print at any time to see the current value
+    >>> print(int_range_set) # print at any time to see the current value
     IntRangeSet('29370:37381')
 
     Parse the exon start and last lists from strings to lists of integers (converting 'last' to 'stop')
@@ -50,7 +50,7 @@ class IntRangeSet(object):
 
     >>> from itertools import izip
     >>> int_range_set -= izip(exon_starts,exon_stops)
-    >>> print int_range_set # See what it looks like
+    >>> print(int_range_set) # See what it looks like
     IntRangeSet('30818:32358,32562:36715')
 
     Create the desired output by iterating through each contiguous range of integers
@@ -171,7 +171,7 @@ class IntRangeSet(object):
     The argument to a method and the right-hand side of an operator can be a *ranges input* rather than :class:`IntRangeSet`. For example,
 
         >>> big = IntRangeSet('-1000:2000')
-        >>> print big - '10:20,500' # We can subtract this string because it is a legal ranges input.
+        >>> print(big - '10:20,500') # We can subtract this string because it is a legal ranges input.
         IntRangeSet('-1000:10,20:500,501:2000')
 
         This even works for equality testing:
@@ -184,11 +184,11 @@ class IntRangeSet(object):
 
     Like most other Python libraries you specify a range with an inclusive *start* integer and an exclusive *stop*.
 
-        >>> print 7 in IntRangeSet('4:8') # includes 7
+        >>> print(7 in IntRangeSet('4:8')) # includes 7
         True
-        >>> print 8 in IntRangeSet('4:8') # excludes 8
+        >>> print(8 in IntRangeSet('4:8')) # excludes 8
         False
-        >>> print 8 in IntRangeSet(xrange(4,7)) # also excludes 8
+        >>> print(8 in IntRangeSet(xrange(4,7))) # also excludes 8
         False
 
     Be careful with the *ranges inputs* specified with tuples. Suppose we want a :class:`IntRangeSet` containing 4,5,6,7.
@@ -268,10 +268,10 @@ class IntRangeSet(object):
 
         >>> a = IntRangeSet('0:5,6:11')
         >>> a *= 5
-        >>> print a # should be unchanged
+        >>> print(a) # should be unchanged
         IntRangeSet('0:5,6:11')
         >>> a *= 0
-        >>> print a # should be empty
+        >>> print(a) # should be empty
         IntRangeSet('')
         '''
         if n <= 0:
@@ -410,13 +410,13 @@ class IntRangeSet(object):
         * ``a == b``
 
 
-        >>> print IntRangeSet('0:10,12') == IntRangeSet('0:10,12')
+        >>> print(IntRangeSet('0:10,12') ==) IntRangeSet('0:10,12')
         True
-        >>> print IntRangeSet('0:10,12') == IntRangeSet('0:10')
+        >>> print(IntRangeSet('0:10,12') ==) IntRangeSet('0:10')
         False
-        >>> print IntRangeSet('0:10,12') == IntRangeSet('12,0:5,5:10')
+        >>> print(IntRangeSet('0:10,12') ==) IntRangeSet('12,0:5,5:10')
         True
-        >>> print IntRangeSet('0:10,12') == '0:10,12' # The right-hand can be any ranges input
+        >>> print(IntRangeSet('0:10,12') == '0:10,12') # The right-hand can be any ranges input
         True
         '''
         self, other = IntRangeSet._make_args_range_set(self, other)
@@ -454,13 +454,13 @@ class IntRangeSet(object):
 
         :Example:
 
-        >>> print 3 in IntRangeSet('0:5,6:11')
+        >>> print(3 in) IntRangeSet('0:5,6:11')
         True
-        >>> print IntRangeSet('4:7') in IntRangeSet('0:5,6:11')
+        >>> print(IntRangeSet('4:7') in) IntRangeSet('0:5,6:11')
         False
         >>> '6:9' in IntRangeSet('0:5,6:11') # The left-hand of 'in' can be any ranges input
         True
-        >>> print IntRangeSet('0:5,6:11') >= '6:9' # The right-hand of can be any ranges input
+        >>> print(IntRangeSet('0:5,6:11') >= '6:9') # The right-hand of can be any ranges input
         True
 
         The 'issuperset' method also supports unioning multiple ranges inputs.
@@ -502,7 +502,7 @@ class IntRangeSet(object):
         '''
         Use the standard str(a) function to create a string representation of a, an IntRangeSet.
 
-        >>> print "Hello " + str(IntRangeSet(2,3,4,10))
+        >>> print("Hello " +) str(IntRangeSet(2,3,4,10))
         Hello IntRangeSet('2:5,10')
         '''
         return repr(self)
@@ -512,7 +512,7 @@ class IntRangeSet(object):
         '''
         Use the standard repr(a) function to create a string representation of a, an IntRangeSet.
 
-        >>> print "Hello " + repr(IntRangeSet(2,3,4,10))
+        >>> print("Hello " +) repr(IntRangeSet(2,3,4,10))
         Hello IntRangeSet('2:5,10')
         '''
         return "IntRangeSet('{0}')".format(self._repr_internal(":", ","))
@@ -993,13 +993,13 @@ class IntRangeSet(object):
         Python's standard slice notation may be used and returns IntRangeSets.
         (Remember that the Stop number in slice notation is exclusive.)
 
-        >>> print IntRangeSet('100:200,1000')[0:10] # Integers 0 (inclusive) to 10 (exclusive)
+        >>> print(IntRangeSet('100:200,1000')[0:10]) # Integers 0 (inclusive) to 10 (exclusive)
         IntRangeSet('100:110')
 
-        >>> print IntRangeSet('100:200,1000')[0:10:2] # Integers 0 (inclusive) to 10 (exclusive) with step 2
+        >>> print(IntRangeSet('100:200,1000')[0:10:2]) # Integers 0 (inclusive) to 10 (exclusive) with step 2
         IntRangeSet('100,102,104,106,108')
 
-        >>> print IntRangeSet('100:200,1000')[-3:] # The last three integers in the IntRangeSet.
+        >>> print(IntRangeSet('100:200,1000')[-3:]) # The last three integers in the IntRangeSet.
         IntRangeSet('198:200,1000')
 
         An IntRangeSet can also be accessed with any ranges input.
@@ -1092,7 +1092,7 @@ class IntRangeSet(object):
 
         :Example:
 
-        >>> print IntRangeSet('0:5,6:10') | 5
+        >>> print(IntRangeSet('0:5,6:10') |) 5
         IntRangeSet('0:10')
 
         The 'union' method also support unioning multiple ranges inputs,
@@ -1208,7 +1208,7 @@ class IntRangeSet(object):
 
         :Example:
 
-        >>> print IntRangeSet('0:5,6:11') <= '-1:101' # The right-hand can be any ranges input
+        >>> print(IntRangeSet('0:5,6:11') <= '-1:101') # The right-hand can be any ranges input
         True
 
         Note: By definition, any set is a subset of itself.
@@ -1227,7 +1227,7 @@ class IntRangeSet(object):
 
         :Example:
 
-        >>> print IntRangeSet('0:5,6:11') < '-1:101' # The right-hand can be any ranges input
+        >>> print(IntRangeSet('0:5,6:11') < '-1:101') # The right-hand can be any ranges input
         True
 
         Note: By definition, no set is a proper subset of itself.
@@ -1245,7 +1245,7 @@ class IntRangeSet(object):
 
         :Example:
 
-        >>> print IntRangeSet('0:5,6:11') > '7:10' # The right-hand can be any ranges input
+        >>> print(IntRangeSet('0:5,6:11') > '7:10') # The right-hand can be any ranges input
         True
 
         Note: By definition, no set is a proper superset of itself.
@@ -1264,7 +1264,7 @@ class IntRangeSet(object):
 
         :Example:
 
-        >>> print IntRangeSet('0:5,6:11') & '3:8'
+        >>> print(IntRangeSet('0:5,6:11') &) '3:8'
         IntRangeSet('3:5,6:8')
 
         The 'intersection' method also support intersecting multiple ranges inputs,
@@ -1336,9 +1336,9 @@ class IntRangeSet(object):
 
         :Example:
 
-        >>> print IntRangeSet('0:5,6:11') - 1
+        >>> print(IntRangeSet('0:5,6:11') -) 1
         IntRangeSet('0,2:5,6:11')
-        >>> print IntRangeSet('0:5,6:11') - '3:100'
+        >>> print(IntRangeSet('0:5,6:11') -) '3:100'
         IntRangeSet('0:3')
 
         The 'difference' method also supports subtracting multiple input ranges
@@ -1367,7 +1367,7 @@ class IntRangeSet(object):
 
         :Example:
 
-        >>> print IntRangeSet('0:5,6:11') ^ '3:9'
+        >>> print(IntRangeSet('0:5,6:11') ^) '3:9'
         IntRangeSet('0:3,5,9:11')
         '''
         result = self - ranges

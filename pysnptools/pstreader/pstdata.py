@@ -31,7 +31,7 @@ class PstData(PstReader):
 
         >>> from pysnptools.pstreader import PstData
         >>> pstdata = PstData(row=[['fam0','iid0'],['fam0','iid1']], col=['snp334','snp349','snp921'], val=[[0.,2.,0.],[0.,1.,2.]])
-        >>> print pstdata.val[0,1], pstdata.row_count, pstdata.col_count
+        >>> print(pstdata.val[0,1], pstdata.row_count,) pstdata.col_count
         2.0 2 3
 
     **Equality:**
@@ -44,13 +44,13 @@ class PstData(PstReader):
         >>> from pysnptools.pstreader import PstData
         >>> pstdata1 = PstData(row=[['fam0','iid0'],['fam0','iid1']], col=['snp334','snp349','snp921'], val=[[0.,2.,0.],[0.,1.,2.]])
         >>> pstdata2 = PstData(row=[['fam0','iid0'],['fam0','iid1']], col=['snp334','snp349','snp921'], val=[[0.,2.,0.],[0.,1.,2.]])
-        >>> print pstdata1 == pstdata2 #True, because all the arrays have the same values.
+        >>> print(pstdata1 == pstdata2) #True, because all the arrays have the same values.
         True
-        >>> print pstdata1.val is pstdata2.val #False, because the two arrays have different memory.
+        >>> print(pstdata1.val is pstdata2.val) #False, because the two arrays have different memory.
         False
         >>> pstdata3 = PstData(row=['a','b'], col=['snp334','snp349','snp921'], val=[[0.,2.,0.],[0.,1.,2.]])
         >>> pstdata4 = PstData(row=[['fam0','iid0'],['fam0','iid1']], col=['snp334','snp349','snp921'], val=[[0.,2.,0.],[0.,1.,2.]])
-        >>> print pstdata3 == pstdata4 #False, because the rows have different ids.
+        >>> print(pstdata3 == pstdata4) #False, because the rows have different ids.
         False
 
 
@@ -78,7 +78,7 @@ class PstData(PstReader):
 
     >>> from pysnptools.pstreader import PstNpz
     >>> pstdata = PstNpz('../examples/toydata.pst.npz')[:5,:].read() #read data for first 5 rows
-    >>> print pstdata.val[4,100] #print one of the values
+    >>> print(pstdata.val[4,100]) #print one of the values
     2.0
     """
 

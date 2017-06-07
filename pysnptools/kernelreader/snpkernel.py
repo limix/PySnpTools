@@ -30,9 +30,9 @@ class SnpKernel(KernelReader):
         >>> from pysnptools.standardizer import Unit
         >>> snp_on_disk = Bed('../examples/toydata.bed',count_A1=False)     # A Bed file is specified, but nothing is read from disk
         >>> kernel_on_disk = SnpKernel(snp_on_disk, Unit(),block_size=500)  # A kernel is specified, but nothing is read from disk
-        >>> print kernel_on_disk #Print the specification
+        >>> print(kernel_on_disk) #Print the specification
         SnpKernel(Bed('../examples/toydata.bed',count_A1=False),standardizer=Unit(),block_size=500)
-        >>> print kernel_on_disk.iid_count                                  # iid information is read from disk, but not SNP data
+        >>> print(kernel_on_disk.iid_count                                 ) # iid information is read from disk, but not SNP data
         500
         >>> kerneldata = kernel_on_disk.read().standardize()                # SNPs are read and Unit standardized, 500 at a time, to create a kernel, which is then standardized
         >>> print kerneldata.val[0,0]

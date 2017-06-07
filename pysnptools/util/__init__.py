@@ -18,7 +18,7 @@ def intersect_apply(data_list, sort_by_dataset=True, intersect_before_standardiz
         If False, the order is arbitrary, but consistent.
     :type sort_by_dataset: bool
 
-    :param intersect_before_standardize: optional. Special code for :class:`.SnpKernel`, the class that postpones computing a kernel from SNP data. 
+    :param intersect_before_standardize: optional. Special code for :class:`.SnpKernel`, the class that postpones computing a kernel from SNP data.
         If True (default), :class:`.SnpKernel` will remove any iids before SNP standardization before computing the kernel.
         If False, SNPs will be standardized with all iids, then the kernel will be computed, then any iids will be removed.
     :type intersect_before_standardize: bool
@@ -36,7 +36,7 @@ def intersect_apply(data_list, sort_by_dataset=True, intersect_before_standardiz
     A dictionary with ['iid'] and ['vals'] keys    The same dictionary but with the iid and vals values adjusted
     Tuple of the form (val ndarray, iid list)      A new tuple with the val ndarray and iid list adjusted
     ============================================== ================================================================
-    
+
     If the iids in all the datasets are already the same and in the same order, then the datasets are returned without change.
 
     Notice that only dictionaries are processed in-place. Inputting a :class:`.SnpReader` and :class:`.KernelReader` returns a new class of the same type (unless its iids
@@ -58,7 +58,7 @@ def intersect_apply(data_list, sort_by_dataset=True, intersect_before_standardiz
     >>> # Create five new datasets with consistent iids
     >>> ignore_out, kernel_out, pheno_out, cov_as_tuple_out = intersect_apply([ignore_in, kernel_in, pheno_in, cov_as_tuple_in])
     >>> # Print the first five iids from each dataset
-    >>> print ignore_out, kernel_out.iid[:5], pheno_out.iid[:5], cov_as_tuple_out[1][:5]
+    >>> print(ignore_out, kernel_out.iid[:5], pheno_out.iid[:5],) cov_as_tuple_out[1][:5]
     None [['POP1' '0']
      ['POP1' '12']
      ['POP1' '44']
@@ -92,7 +92,7 @@ def intersect_apply(data_list, sort_by_dataset=True, intersect_before_standardiz
             reindex = lambda data, iididx,is_test=is_test : _reindex_identitykernel(data, iididx, is_test)
         else:
             try: #pheno dictionary
-                iid = data['iid'] 
+                iid = data['iid']
                 reindex = lambda data, iididx : _reindex_phen_dict(data, iididx)
             except:
                 if hasattr(data,'iid1') and is_test: #test kernel
@@ -121,7 +121,7 @@ def intersect_apply(data_list, sort_by_dataset=True, intersect_before_standardiz
         logging.debug("iids match up across {0} data sets".format(len(iid_list)))
         return data_list
     else:
-        logging.debug("iids do not match up, so intersecting the data over individuals")            
+        logging.debug("iids do not match up, so intersecting the data over individuals")
         indarr = intersect_ids(iid_list)
         assert indarr.shape[0] > 0, "no individuals remain after intersection, check that ids match in files"
 
@@ -129,13 +129,13 @@ def intersect_apply(data_list, sort_by_dataset=True, intersect_before_standardiz
             #Look for first non-None iid
             for i, iid in enumerate(iid_list):
                 if iid is not None:
-                    #sort the indexes so that SNPs ids in their original order (and 
+                    #sort the indexes so that SNPs ids in their original order (and
                     #therefore we have to move things around in memory the least amount)
                     sortind=np.argsort(indarr[:,i])
                     indarr=indarr[sortind]
                     break
 
-        #!!! for the case in which some of the data items don't need to change, can we avoid calling reindex? Alternatively, should the _read code notice that all the iids are the same and in the same order                    
+        #!!! for the case in which some of the data items don't need to change, can we avoid calling reindex? Alternatively, should the _read code notice that all the iids are the same and in the same order
         data_out_list = []
         for i in range(indarr.shape[1]):
             data = data_list[i]
@@ -185,8 +185,8 @@ def _all_same(iids_list):
 def intersect_ids(idslist):
     '''
     .. deprecated::
-       Use :func:`intersect_apply` instead.    
-    
+       Use :func:`intersect_apply` instead.
+
     Takes a list of 2d string arrays of family and case ids.
     These are intersected.
 
@@ -197,7 +197,7 @@ def intersect_ids(idslist):
 
     If one of the lists=None, it is ignored (but still has values reported in indarr, all equal to -1),
     '''
-    id2ind={}    
+    id2ind={}
     L=len(idslist)
     observed=sp.zeros(L,dtype='bool')
     first = True
@@ -221,8 +221,8 @@ def intersect_ids(idslist):
     indarr[:,~observed]=-1                          #replace all Nan's from empty lists to -1
     inan = sp.isnan(indarr).any(1)                  #find any rows that contain at least one Nan
     indarr=indarr[~inan]                            #keep only rows that are not NaN
-    indarr=sp.array(indarr,dtype='int')             #convert to int so can slice 
-    return indarr   
+    indarr=sp.array(indarr,dtype='int')             #convert to int so can slice
+    return indarr
 
 
 def sub_matrix(val, row_index_list, col_index_list, order='A', dtype=sp.float64):
@@ -252,7 +252,7 @@ def sub_matrix(val, row_index_list, col_index_list, order='A', dtype=sp.float64)
     >>> submatrix = pstutil.sub_matrix(matrix,[0,2,11],[6,5,4,3,2,1,0])
     >>> print (int(submatrix.shape[0]),int(submatrix.shape[1]))
     (3, 7)
-    >>> print matrix[2,0] == submatrix[1,6] #The row # 2 is now #1, the column #0 is now #6.
+    >>> print(matrix[2,0] == submatrix[1,6]) #The row # 2 is now #1, the column #0 is now #6.
     True
 
     Note: Behind the scenes, for performance, this function selects and then calls one of 16 C++ helper functions.
@@ -400,7 +400,7 @@ def weighted_simple_linear_regression(xs, ys, weights):
     >>> ys = np.array([103.664086,89.80645161,83.86888046,90.54141176])
     >>> weights = np.array([2.340862423,4.982888433,0.17522245,0.098562628])
     >>> slope, intercept, xmean, ymean = weighted_simple_linear_regression(xs, ys, weights)
-    >>> print round(slope,5), round(intercept,5), round(xmean,5), round(ymean,5)
+    >>> print(round(slope,5), round(intercept,5), round(xmean,5),) round(ymean,5)
     -3.52643 293.05586 56.46133 93.9487
 
     '''

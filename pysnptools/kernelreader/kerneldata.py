@@ -29,7 +29,7 @@ class KernelData(KernelReader,PstData):
 
         >>> from pysnptools.kernelreader import KernelData
         >>> kerneldata = KernelData(iid=[['fam0','iid0'],['fam0','iid1']], val=[[1.,.5],[.5,1.]])
-        >>> print kerneldata.val[0,1], kerneldata.iid_count
+        >>> print(kerneldata.val[0,1],) kerneldata.iid_count
         0.5 2
 
     **Equality:**
@@ -42,13 +42,13 @@ class KernelData(KernelReader,PstData):
         >>> from pysnptools.kernelreader import KernelData
         >>> kerneldata1 = KernelData(iid=[['fam0','iid0'],['fam0','iid1']], val=[[1.,.5],[.5,1.]])
         >>> kerneldata2 = KernelData(iid=[['fam0','iid0'],['fam0','iid1']], val=[[1.,.5],[.5,1.]])
-        >>> print kerneldata1 == kerneldata2 #True, because all the arrays have the same values.
+        >>> print(kerneldata1 == kerneldata2) #True, because all the arrays have the same values.
         True
-        >>> print kerneldata1.val is kerneldata2.val #False, because the two arrays have different memory.
+        >>> print(kerneldata1.val is kerneldata2.val) #False, because the two arrays have different memory.
         False
         >>> kerneldata3 = KernelData(iid=[['a','0'],['b','0']], val=[[1.,.5],[.5,1.]])
         >>> kerneldata4 = KernelData(iid=[['fam0','iid0'],['fam0','iid1']], val=[[1.,.5],[.5,1.]])
-        >>> print kerneldata3 == kerneldata4 #False, because the iids are different.
+        >>> print(kerneldata3 == kerneldata4) #False, because the iids are different.
         False
 
 
@@ -83,7 +83,7 @@ class KernelData(KernelReader,PstData):
 
     >>> from pysnptools.kernelreader import KernelData
     >>> kerneldata = KernelData(iid=[['fam0','iid0'],['fam0','iid1']], val=[[1.,.5],[.5,1.]])
-    >>> print kerneldata.val[0,1], kerneldata.iid_count
+    >>> print(kerneldata.val[0,1],) kerneldata.iid_count
     0.5 2
     """
 

@@ -30,7 +30,7 @@ class Standardizer(object):
     >>> snp_train, trained_standardizer = Unit().standardize(snp_whole[train_idx,:].read(),return_trained=True)
     >>> print snp_train.val[0,0]
     0.233549683248
-    >>> print trained_standardizer.stats[0,:] #The mean and stddev of the 1st SNP on the training data
+    >>> print(trained_standardizer.stats[0,:]) #The mean and stddev of the 1st SNP on the training data
     [ 1.94827586  0.22146953]
     >>> snp_test = snp_whole[test_idx,:].read().standardize(trained_standardizer)
     >>> snp_test.val[0,0]
