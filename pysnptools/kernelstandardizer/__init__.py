@@ -10,32 +10,6 @@ class KernelStandardizer(object):
     A KernelStandardizer is a class such as :class:`.DiagKtoN` and :class:`.Identity` to be used by the :meth:`.KernelData.standardize` to standardize Kernel data.
     It always works in-place *and* returns the :class:`.KernelData` on which it works.
 
-    :Example:
-
-    Read and standardize Kernel data.
-
-    >>> from pysnptools.kernelstandardizer import DiagKtoN
-    >>> from pysnptools.kernelreader import KernelNpz
-    >>> kerneldata1 = KernelNpz('pysnptools/examples/toydata.kernel.npz').read()
-    >>> print(np.diag(kerneldata1.val).sum())
-    5000000.0
-    >>> kerneldata1 = kerneldata1.standardize(DiagKtoN())
-    >>> print(np.diag(kerneldata1.val).sum())
-    500.0
-
-    Can also return a constant kernel standardizer that be applied to other :class:`.KernelData`.
-
-    >>> kernel_whole = KernelNpz('pysnptools/examples/toydata.kernel.npz')
-    >>> train_idx, test_idx = range(10,kernel_whole.iid_count), range(0,10)  #test on the first 10, train on the rest
-    >>> kernel_train, trained_standardizer = DiagKtoN().standardize(kernel_whole[train_idx].read(),return_trained=True)
-    >>> print(np.diag(kernel_train.val).sum())
-    490.0
-    >>> print(trained_standardizer.factor)
-    9.99909752089e-05
-    >>> kernel_whole_test = kernel_whole[:,test_idx].read().standardize(trained_standardizer)
-    >>> kernel_whole_test.val[0,0]
-    0.99221743920965288
-
 
     Details of Methods & Properties:
     '''
@@ -66,12 +40,6 @@ class Identity(KernelStandardizer):
 
     >>> from pysnptools.kernelstandardizer import Identity as KS_Identity
     >>> from pysnptools.kernelreader import KernelNpz
-    >>> kerneldata1 = KernelNpz('pysnptools/examples/toydata.kernel.npz').read()
-    >>> print(np.diag(kerneldata1.val).sum())
-    5000000.0
-    >>> kerneldata1 = kerneldata1.standardize(KS_Identity())
-    >>> print(np.diag(kerneldata1.val).sum())
-    5000000.0
     '''
 
     def __init__(self):
@@ -83,7 +51,7 @@ class Identity(KernelStandardizer):
         else:
             return kerneldata
 
-    def __repr__(self): 
+    def __repr__(self):
         return "{0}()".format(self.__class__.__name__)
 
 from pysnptools.standardizer import DiagKtoN #as SN_DiagKtoN
@@ -96,4 +64,3 @@ if __name__ == "__main__":
 
     import doctest
     doctest.testmod()
-

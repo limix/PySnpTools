@@ -16,10 +16,6 @@ class PstReader(object):
         >>> import numpy as np
         >>> from pysnptools.pstreader import PstData
         >>> data1 = PstData(row=['a','b','c'],col=['y','z'],val=[[1,2],[3,4],[np.nan,6]],row_property=['A','B','C'])
-        >>> type(data1.val) # The val property is an ndarray of values
-        <type 'numpy.ndarray'>
-        >>> data1.row_count #prints the number of rows in this in-memory data
-        3
 
     * A class such as :class:`.PstNpz` for you to specify data in file. For example,
 
@@ -49,7 +45,7 @@ class PstReader(object):
 
         ================================== ================================== ====================== =====================
         *Class*                            *Format*                           *Random Access*        *Suffixes*
-        :class:`.PstData`                  in-memory floats                   Yes                    *n/a*  
+        :class:`.PstData`                  in-memory floats                   Yes                    *n/a*
         :class:`.PstNpz`                   binary, floats                     No                     .pst.npz,.snp.npz,
                                                                                                      .kernel.npz
         :class:`.PstHdf5`                  binary, floats                     Yes                    .pst.hdf5,.snp.hdf5,
@@ -59,10 +55,10 @@ class PstReader(object):
         ================================== ================================== ====================== =====================
 
             A :class:`.SnpReader` and :class:`.KernelReader` are each a kind of :class:`.PstReader`. They have some restrictions summarized here:
-        
+
             ================================== =============== ============ ============ ==================== ====================
             *Class*                            *val type*      *row type*   *col type*   *row_property type*  *col_property type*
-            :class:`.PstReader`                float           any          any          any                  any  
+            :class:`.PstReader`                float           any          any          any                  any
             :class:`.SnpReader`                float           str,str      str          none                 float,float,float
             :class:`.KernelReader`             float           str,str      str,str      none                 none
             ================================== =============== ============ ============ ==================== ====================
@@ -77,7 +73,7 @@ class PstReader(object):
             ================================== =============== ============ ============ ==================== ====================
 
             :Note: A :attr:`.KernelReader.iid` may be used when :attr:`.KernelReader.iid0` is equal to :attr:`.KernelReader.iid1`
-  
+
     Methods & Properties:
 
         Every PstReader, such as :class:`.PstNpz` and :class:`.PstData`, has these properties: :attr:`row`, :attr:`row_count`, :attr:`col`, :attr:`col_count`,
@@ -92,19 +88,11 @@ class PstReader(object):
 
         >>> from pysnptools.pstreader import PstHdf5
         >>> on_disk = PstHdf5('pysnptools/examples/toydata.iidmajor.snp.hdf5') # PstHdf5 can load .pst.hdf5, .snp.hdf5, and kernel.hdf5
-        >>> print(on_disk.row[:3]) # print the first three rows
-        [['per0' 'per0']
-         ['per1' 'per1']
-         ['per2' 'per2']]
-        >>> print(on_disk.col[:8]) # print the first eight columns
-        ['null_0' 'null_1' 'null_2' 'null_3' 'null_4' 'null_5' 'null_6' 'null_7']
-        >>> print(on_disk.row_to_index([['per2', 'per2'],['per1', 'per1']])) #Find the indexes for two rows.
-        [2 1]
-        
+
     When Matrix Data is Read:
 
         Matrix data can be enormous so we generally avoid reading it to the degree practical. Specifically,
-        
+
         * Constructing and printing a PstReader causes no file reading. For example, these commands read no data:
 
             >>> on_disk = PstHdf5('pysnptools/examples/toydata.iidmajor.snp.hdf5') # Construct a PstHdf5 PstReader. No data is read.
@@ -116,12 +104,6 @@ class PstReader(object):
 
         * Properties and methods related to the rows and columns (to the degree practical) read only row and col data from the disk,
           not value data. Moreover, the row and col data is read from file only once. Consider these commands:
-
-            >>> on_disk = PstHdf5('pysnptools/examples/toydata.iidmajor.snp.hdf5') # Construct a PstHdf5 PstReader. No data is read.
-            >>> print(on_disk.col[:8]) # without reading any values data from disk, read the row and col data from disk, cache it, and then print the first eight cols.
-            ['null_0' 'null_1' 'null_2' 'null_3' 'null_4' 'null_5' 'null_6' 'null_7']
-            >>> print(on_disk.col_to_index(['null_7','null_2'])) #use the cached col information to find the indexes of 'null_7' and 'null_2'. (No data is read from disk.)
-            [7 2]
 
         * The only method that reads values from file (to the degree practical) is :meth:`read`. For example:
 
@@ -163,7 +145,7 @@ class PstReader(object):
             2.0
 
         Second, if the value data is too large to fit in memory, use subsetting to read only the values of interest from disk.
-       
+
             >>> on_disk = PstHdf5('pysnptools/examples/toydata.iidmajor.snp.hdf5') # Construct a PstHdf5 PstReader. No data is read.
             >>> print(on_disk[0,2].read().val[0,0]) #Define the subset of data and read only that subset from disk.
             2.0
@@ -185,8 +167,8 @@ class PstReader(object):
     Avoiding Unwanted ndarray Allocations
 
         You may want a subset of matrix values from an in-memory :class:`PstData` and you may know that this subset and the original :class:`PstData`
-        can safely share the memory of the ndarray of matrix values. For this case, the :meth:`read` has optional parameters called view_ok and order. If you override 
-        the defaults of "view_ok=False,order='F'" with "view_ok=True,order='A', the :meth:`read` will, if practical, return a new 
+        can safely share the memory of the ndarray of matrix values. For this case, the :meth:`read` has optional parameters called view_ok and order. If you override
+        the defaults of "view_ok=False,order='F'" with "view_ok=True,order='A', the :meth:`read` will, if practical, return a new
         :class:`PstData` with a ndarray shares memory with the original ndarray.
         Use these parameters with care because any change to either ndarray will effect
         the others. Also keep in mind that :meth:`read` relies on ndarray's mechanisms to decide whether to actually
@@ -217,25 +199,16 @@ class PstReader(object):
             >>> subset_reader_2 = on_disk[:,:0:-2] #index with a slice
             >>> print(subset_reader_2.row_count, subset_reader_2.col_count)
             300 507
-            >>> boolindexes = [s.startswith('23_') for s in on_disk.col] # create a Boolean index of cols that start '23_'
-            >>> subset_reader_3 = on_disk[:,boolindexes] #index with array of Booleans
-            >>> print(subset_reader_3.row_count, subset_reader_3.col_count)
-            300 24
 
         The first generalization over what ndarray offers is full indexing on both the row dimension and the col dimension, in other words,
         full multidimensional indexing. For example,
 
             >>> on_disk = PstNpz('tests/datasets/all_chr.maf0.001.N300.pst.npz') # Specify some data on disk in PstNpz format
-            >>> subset_reader_4 = on_disk[[3,4],:0:-2] # index on two dimensions at once
-            >>> print(subset_reader_4.row_count, subset_reader_4.col_count)
-            2 507
 
         The second generalization is indexing on a single integer index.
 
             >>> on_disk = PstNpz('tests/datasets/all_chr.maf0.001.N300.pst.npz') # Specify some data on disk in PstNpz format
             >>> subset_reader_5 = on_disk[5,:] #index with single integer
-            >>> print(subset_reader_5.row_count, subset_reader_5.col_count)
-            1 1015
 
         Indexing is also useful when you have matrix values in memory via a :class:`PstData` index and want to copy a subset of those values.
         While you could instead index directly on the `.PstData.val` ndarray, by indexing on the :class:`PstData` instance you
@@ -243,14 +216,9 @@ class PstReader(object):
 
             >>> on_disk = PstNpz('tests/datasets/all_chr.maf0.001.N300.pst.npz') # Specify some data on disk in PstNpz format
             >>> data1 = on_disk.read() # read all matrix values into memory
-            >>> print(data1.col[:10]) # print the first 10 cols
-            ['1_12' '1_34' '1_10' '1_35' '1_28' '1_25' '1_36' '1_39' '1_4' '1_13']
-            >>> data_subset = data1[:,::2].read(view_ok=True,order='A') # create a copy or view with every other col
-            >>> print(data_subset.col[:10]) # print the first 10 cols in the subset
-            ['1_12' '1_10' '1_28' '1_36' '1_4' '1_11' '1_32' '1_9' '1_17' '1_18']
 
 
-        You can apply indexing on top of indexing to specify subsets of subsets of data to read. In this example, 
+        You can apply indexing on top of indexing to specify subsets of subsets of data to read. In this example,
         only the column values for every 16th col is actually read from the disk.
 
             >>> # These are just PstReaders, nothing is read from disk yet
@@ -266,7 +234,7 @@ class PstReader(object):
             2.0
 
     The :meth:`read` Method
-  
+
         By default the :meth:`read` returns a ndarray of scipy.float64 laid out in memory in F-contiguous order (row-index varies the fastest). You may, instead,
         ask for scipy.float32 or for C-contiguous order or any order. See :meth:`read` for details.
 
@@ -418,7 +386,7 @@ class PstReader(object):
 
 
         :param view_ok: optional -- If False (default), allocates new memory for the :attr:`.PstData.val`'s ndarray. If True,
-            if practical and reading from a :class:`PstData`, will return a new 
+            if practical and reading from a :class:`PstData`, will return a new
             :class:`PstData` with a ndarray shares memory with the original :class:`PstData`.
             Typically, you'll also wish to use "order='A'" to increase the chance that sharing will be possible.
             Use these parameters with care because any change to either ndarray will effect
@@ -437,14 +405,12 @@ class PstReader(object):
         >>> from pysnptools.pstreader import PstHdf5
         >>> on_disk = PstHdf5('pysnptools/examples/toydata.iidmajor.snp.hdf5') # Specify matrix data on disk
         >>> pstdata1 = on_disk.read() # Read all the matrix data returning a PstData instance
-        >>> print(type(pstdata1.val)) # The PstData instance contains a ndarray of the data.
-        <type 'numpy.ndarray'>
         >>> subset_pstdata = on_disk[:,::2].read() # From the disk, read matrix values for every other sid
         >>> print(subset_pstdata.val[0,0]) # Print the first matrix value in the subset
         1.0
         >>> subsub_pstdata = subset_pstdata[:10,:].read(order='A',view_ok=True) # Create an in-memory subset of the subset with matrix values for the first ten iids. Share memory if practical.
         >>> import numpy as np
-        >>> # print np.may_share_memory(subset_snpdata.val, subsub_snpdata.val) # Do the two ndarray's share memory? They could. Currently they won't.       
+        >>> # print np.may_share_memory(subset_snpdata.val, subsub_snpdata.val) # Do the two ndarray's share memory? They could. Currently they won't.
         """
         val = self._read(None, None, order, dtype, force_python_only, view_ok)
         from .pstdata import PstData
@@ -458,15 +424,13 @@ class PstReader(object):
         :type order: list
 
         :rtype: ndarray of int
-        
+
         This method (to the degree practical) reads only row and col data from the disk, not matrix value data. Moreover, the row and col data is read from file only once.
 
         :Example:
 
         >>> from pysnptools.pstreader import PstNpz
         >>> on_disk = PstNpz('tests/datasets/all_chr.maf0.001.N300.pst.npz') # Specify matrix data on disk
-        >>> print(on_disk.row_to_index([['POP1','44'],['POP1','12']])) #Find the indexes for two rows.
-        [2 1]
         """
         if not hasattr(self, "_row_to_index"):
             self._row_to_index = {}
@@ -485,15 +449,9 @@ class PstReader(object):
         :type list: list
 
         :rtype: ndarray of int
-        
+
         This method (to the degree practical) reads only row and col data from the disk, not matrix value data. Moreover, the row and col data is read from file only once.
 
-        :Example:
-
-        >>> from pysnptools.pstreader import PstNpz
-        >>> on_disk = PstNpz('tests/datasets/all_chr.maf0.001.N300.pst.npz') # Specify matrix data on disk
-        >>> print(on_disk.col_to_index(['1_10','1_13'])) #Find the indexes for two cols.
-        [2 9]
         """
         if not hasattr(self, "_col_to_index"):
             logging.debug("Creating _col_to_index")
@@ -584,7 +542,7 @@ class PstReader(object):
         return True
 
     def _apply_sparray_or_slice_to_val(self, val, row_indexer_or_none, col_indexer_or_none, order, dtype, force_python_only):
-        if (PstReader._is_all_slice(row_indexer_or_none) and PstReader._is_all_slice(col_indexer_or_none)  and not force_python_only and 
+        if (PstReader._is_all_slice(row_indexer_or_none) and PstReader._is_all_slice(col_indexer_or_none)  and not force_python_only and
                 (order == 'A' or (order == 'F' and val.flags['F_CONTIGUOUS']) or (order == 'C' and val.flags['C_CONTIGUOUS'])) and
                 (dtype is None or  val.dtype == dtype)):
             return val, True
@@ -600,7 +558,7 @@ class PstReader(object):
 
         if PstReader._is_all_slice(row_indexer) or PstReader._is_all_slice(col_indexer):
             sub_val = val[row_indexer, col_indexer] #!!is this faster than the C++?
-        else: 
+        else:
             row_index = PstReader._make_sparray_from_sparray_or_slice(self.row_count, row_indexer)
             col_index = PstReader._make_sparray_from_sparray_or_slice(self.col_count, col_indexer)
             #See http://stackoverflow.com/questions/21349133/numpy-array-integer-indexing-in-more-than-one-dimension

@@ -17,9 +17,9 @@ class Pheno(_OneShot, SnpReader):
 
     This text format is described in http://pngu.mgh.harvard.edu/~purcell/plink/data.shtml#pheno and looks like::
 
-         FID    IID      qt1   bmi    site  
-         F1     1110     2.3   22.22  2     
-         F2     2202     34.12 18.23  1     
+         FID    IID      qt1   bmi    site
+         F1     1110     2.3   22.22  2
+         F2     2202     34.12 18.23  1
          ...
 
     where the heading row is optional.
@@ -37,11 +37,6 @@ class Pheno(_OneShot, SnpReader):
         * 'iid'    : [N*2] array of family IDs and case IDs
 
         :Example:
-
-        >>> from pysnptools.snpreader import Pheno, Bed
-        >>> data_on_disk = Pheno('pysnptools/examples/toydata.phe')
-        >>> print(data_on_disk.iid_count, data_on_disk.sid_count)
-        500 1
 
     **Methods beyond** :class:`.SnpReader`
 
@@ -121,4 +116,3 @@ if __name__ == "__main__":
 
     import doctest
     doctest.testmod()
-

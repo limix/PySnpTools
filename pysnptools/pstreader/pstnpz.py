@@ -16,16 +16,14 @@ class PstNpz(PstReader):
 
     The general NPZ format is described in http://docs.scipy.org/doc/numpy/reference/generated/numpy.savez.html. The PstNpz format stores
     val, row, col, row_property, and col_property information in NPZ format.
-   
+
     **Constructor:**
         :Parameters: * **filename** (*string*) -- The PstNpz file to read.
 
         :Example:
 
         >>> from pysnptools.pstreader import PstNpz
-        >>> data_on_disk = PstNpz('../examples/little.pst.npz')
-        >>> print(data_on_disk.iid_count)
-        500
+        >>> data_on_disk = PstNpz('pysnptools/examples/little.pst.npz')
 
     **Methods beyond** :class:`.NpzReader`
 
@@ -41,7 +39,7 @@ class PstNpz(PstReader):
 
         self._filename = filename
 
-    def __repr__(self): 
+    def __repr__(self):
         return "{0}('{1}')".format(self.__class__.__name__,self._filename)
 
     @property
@@ -124,7 +122,7 @@ class PstNpz(PstReader):
         """
         if isinstance(filename,PstData) and isinstance(pstdata,str): #For backwards compatibility, reverse inputs if necessary
             warnings.warn("write statement should have filename before data to write", DeprecationWarning)
-            filename, pstdata = pstdata, filename 
+            filename, pstdata = pstdata, filename
 
         np.savez(filename, row=pstdata.row, col=pstdata.col, row_property=pstdata.row_property, col_property=pstdata.col_property,val=pstdata.val)
         logging.debug("Done writing " + filename)

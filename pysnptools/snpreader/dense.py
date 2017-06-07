@@ -74,7 +74,7 @@ class Dense(_OneShot,SnpReader):
         with open(self.filename,"r") as fp:
             header = fp.readline()
             iid_string_list = header.strip().split()[1:]
-            iid = np.array([self.extract_iid_function(iid_string) for iid_string in iid_string_list],dtype="string")
+            iid = np.array([self.extract_iid_function(iid_string) for iid_string in iid_string_list],dtype=str)
             val_list = []
             for line_index,line in enumerate(fp):
                 if line_index % 1000 == 0:
@@ -118,7 +118,7 @@ class Dense(_OneShot,SnpReader):
 
         if isinstance(filename,SnpData) and isinstance(snpdata,str): #For backwards compatibility, reverse inputs if necessary
             warnings.warn("write statement should have filename before data to write", DeprecationWarning)
-            filename, snpdata = snpdata, filename 
+            filename, snpdata = snpdata, filename
 
         snpsarray = snpdata.val
         with open(filename,"w") as filepointer:

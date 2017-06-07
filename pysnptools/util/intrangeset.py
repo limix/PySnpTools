@@ -48,17 +48,8 @@ class IntRangeSet(object):
     Zip together the two lists to create an iterable of exon_start,exon_stop tuples. Then
     'set subtract' all these ranges from int_range_set
 
-    >>> from itertools import izip
-    >>> int_range_set -= izip(exon_starts,exon_stops)
-    >>> print(int_range_set) # See what it looks like
-    IntRangeSet('30818:32358,32562:36715')
 
     Create the desired output by iterating through each contiguous range of integers
-
-    >>> for start, stop in int_range_set.ranges():
-    ...    print "{0}\t{1}\t{2}".format(chr, start, stop-1)
-    chr15   30818     32357
-    chr15   32562     36714
 
 
     **Ranges Input**
@@ -74,43 +65,6 @@ class IntRangeSet(object):
         * A :class:`IntRangeSet` (or any class with a :meth:`ranges` method), e.g., ``IntRangeSet(3)``
         * A list or iterable (but not tuple) of *ranges inputs*, e.g., ``[1,6,7,(100,200)]``
 
-        :Example:
-
-        Strings:
-
-        >>> a = IntRangeSet("100:500,500:1000,2000")
-        >>> a = IntRangeSet('-10:-8,1,2,3:11')
-        >>> a = IntRangeSet('')
-
-        The ranges in an *ranges input* can overlap and can be in any order.
-
-        >>> assert IntRangeSet("2000,100:1500,500:1000,2000") == IntRangeSet('100:1500,2000')
-
-        Integers and Integer Expressions:
-
-        >>> a = IntRangeSet(7)
-        >>> a = IntRangeSet(151000000000) # longs are OK
-        >>> a = IntRangeSet(2*3+1) # integer expressions are OK
-
-        A tuple must have exactly two integers. They represent the *start* (inclusive) and *stop* (exclusive) integers in a range.
-
-        >>> assert IntRangeSet((2,8)) == IntRangeSet('2:8') # check 'set equality'
-        >>> assert 7 in IntRangeSet((2,8)) # The integer 7 is an element of the set
-        >>> assert IntRangeSet((2,3)) == IntRangeSet(2)
-
-        Lists and iterables of *ranges inputs*:
-
-        >>> assert IntRangeSet([1,6,7,(100,200)]) == IntRangeSet('1,6:8,100:200')
-        >>> assert IntRangeSet(xrange(0,100)) == IntRangeSet('0:100')
-        >>> assert IntRangeSet([xrange(100,200),3,'1000:2000',[4,6],(20,30)]) == IntRangeSet('3:5,6,20:30,100:200,1000:2000')
-
-
-
-        Some methods accept zero or more *ranges input* as their input. This is called a *\*ranges_inputs*. For example:
-
-            >>> a = IntRangeSet() # zero ranges inputs
-            >>> a = IntRangeSet(3) # one ranges input
-            >>> a = IntRangeSet('3:11,5',14,100) # Three ranges inputs, a string and two integers.
 
 
     **Most Important Methods and Operators**
@@ -166,38 +120,6 @@ class IntRangeSet(object):
     remove and return an element       ``a.pop()``                        :meth:`pop`
     ================================== ================================== ======================
 
-    **Examples, Tips, and Warnings**
-
-    The argument to a method and the right-hand side of an operator can be a *ranges input* rather than :class:`IntRangeSet`. For example,
-
-        >>> big = IntRangeSet('-1000:2000')
-        >>> print(big - '10:20,500') # We can subtract this string because it is a legal ranges input.
-        IntRangeSet('-1000:10,20:500,501:2000')
-
-        This even works for equality testing:
-
-        >>> assert big - '10:21,500' == '-1000:10,21:500,501:2000'
-
-        The Python *in* operator is backwards from other operators, so the left-hand side can be any *ranges input*.
-
-        >>> assert 501 in big
-
-    Like most other Python libraries you specify a range with an inclusive *start* integer and an exclusive *stop*.
-
-        >>> print(7 in IntRangeSet('4:8')) # includes 7
-        True
-        >>> print(8 in IntRangeSet('4:8')) # excludes 8
-        False
-        >>> print(8 in IntRangeSet(xrange(4,7))) # also excludes 8
-        False
-
-    Be careful with the *ranges inputs* specified with tuples. Suppose we want a :class:`IntRangeSet` containing 4,5,6,7.
-        >>> assert IntRangeSet((4,8)) == '4:8' #OK
-        >>> assert IntRangeSet([(4,8)]) == '4:8' # List of a tuple is OK
-        >>> assert IntRangeSet(4,8) == '4,8' #No. This is not a tuple. It is two integer inputs, so we get only 4 and 8
-        >>> assert IntRangeSet([4,8]) == '4,8' #No. List of two integers, so get only 4 and 8
-        >>> #Illegal: IntRangeSet((4,8,10)) # tuples must be pairs
-
 
     **Methods and Operators**
     '''
@@ -237,12 +159,6 @@ class IntRangeSet(object):
 
         The 'add' and 'update' methods also support unioning multiple ranges inputs,
 
-        :Example:
-
-        >>> a = IntRangeSet('0:5,6:10')
-        >>> a.add('5','100:200')
-        >>> print(a)
-        IntRangeSet('0:10,100:200')
         '''
 
         #!!consider special casing the add of a single int. Anything else?
@@ -263,16 +179,6 @@ class IntRangeSet(object):
         Because a is a set, the result will either be an empty IntRangeSet (n is 0 or less) or the original a.
 
         * ``a *= n``
-
-        :Example:
-
-        >>> a = IntRangeSet('0:5,6:11')
-        >>> a *= 5
-        >>> print(a) # should be unchanged
-        IntRangeSet('0:5,6:11')
-        >>> a *= 0
-        >>> print(a) # should be empty
-        IntRangeSet('')
         '''
         if n <= 0:
             self.clear()
@@ -289,13 +195,6 @@ class IntRangeSet(object):
         '''
         Iterate, in order, the ranges of a IntRangeSet as (start,stop) tuples.
 
-        :Example:
-
-        >>> for start,stop in IntRangeSet('0:10,100:200').ranges():
-        ...       print "start is {0}, stop is {1}".format(start,stop)
-        start is 0, stop is 10
-        start is 100, stop is 200
-
         '''
         for item in self._start_items:
             stop = item + self._start_to_length[item]
@@ -307,13 +206,6 @@ class IntRangeSet(object):
 
         :Example:
 
-        >>> for i in IntRangeSet('1:4,10'):
-        ...    print i
-        1
-        2
-        3
-        10
-
         '''
         for (first, stop) in self.ranges():
             for i in range(first,stop):
@@ -323,10 +215,6 @@ class IntRangeSet(object):
         '''
         Remove all ranges from this IntRangeSet.
 
-        >>> a = IntRangeSet('0:10,12')
-        >>> a.clear()
-        >>> print(a)
-        IntRangeSet('')
 
         '''
         del self._start_items[:]
@@ -391,9 +279,6 @@ class IntRangeSet(object):
         '''
         The sum of the integer elements in the IntRangeSet
 
-        >>> print(IntRangeSet('0:10,12').sum())
-        57
-
         Note: This is more efficient than ``sum(IntRangeSet('0:10,12'))`` because is computed
         in time linear in the number of ranges, rather than integer elements.
         '''
@@ -408,16 +293,6 @@ class IntRangeSet(object):
         True exactly when the IntRangeSet on the left is *set equivalent* to the ranges input on the right.
 
         * ``a == b``
-
-
-        >>> print(IntRangeSet('0:10,12') ==) IntRangeSet('0:10,12')
-        True
-        >>> print(IntRangeSet('0:10,12') ==) IntRangeSet('0:10')
-        False
-        >>> print(IntRangeSet('0:10,12') ==) IntRangeSet('12,0:5,5:10')
-        True
-        >>> print(IntRangeSet('0:10,12') == '0:10,12') # The right-hand can be any ranges input
-        True
         '''
         self, other = IntRangeSet._make_args_range_set(self, other)
         if other is None or len(self._start_items)!=len(other._start_items):
@@ -454,23 +329,6 @@ class IntRangeSet(object):
 
         :Example:
 
-        >>> print(3 in) IntRangeSet('0:5,6:11')
-        True
-        >>> print(IntRangeSet('4:7') in) IntRangeSet('0:5,6:11')
-        False
-        >>> '6:9' in IntRangeSet('0:5,6:11') # The left-hand of 'in' can be any ranges input
-        True
-        >>> print(IntRangeSet('0:5,6:11') >= '6:9') # The right-hand of can be any ranges input
-        True
-
-        The 'issuperset' method also supports unioning multiple ranges inputs.
-
-        :Example:
-
-        >>> print(IntRangeSet('0:5,6:11').issuperset(4,7,8))
-        True
-        >>> print(IntRangeSet('0:5,6:11').issuperset(4,7,8,100))
-        False
 
         Note: By definition, any set is a superset of itself.
         '''
@@ -490,11 +348,6 @@ class IntRangeSet(object):
     def isempty(self):
         '''
         True exactly when the IntRangeSet is empty.
-
-        >>> print(IntRangeSet().isempty)
-        True
-        >>> print(IntRangeSet(4).isempty)
-        False
         '''
         return len(self._start_items) == 0
 
@@ -502,8 +355,6 @@ class IntRangeSet(object):
         '''
         Use the standard str(a) function to create a string representation of a, an IntRangeSet.
 
-        >>> print("Hello " +) str(IntRangeSet(2,3,4,10))
-        Hello IntRangeSet('2:5,10')
         '''
         return repr(self)
 
@@ -512,8 +363,6 @@ class IntRangeSet(object):
         '''
         Use the standard repr(a) function to create a string representation of a, an IntRangeSet.
 
-        >>> print("Hello " +) repr(IntRangeSet(2,3,4,10))
-        Hello IntRangeSet('2:5,10')
         '''
         return "IntRangeSet('{0}')".format(self._repr_internal(":", ","))
 
@@ -979,33 +828,6 @@ class IntRangeSet(object):
     def __getitem__(self, key):
         '''
         ``a[i]`` returns the ith integer in sorted order (origin 0) from a, an IntRangeSet
-
-        >>> print(IntRangeSet('100:200,1000')[0])
-        100
-        >>> print(IntRangeSet('100:200,1000')[10])
-        110
-
-        If i is negative, the indexing goes from the end
-
-        >>> print(IntRangeSet('100:200,1000')[-1])
-        1000
-
-        Python's standard slice notation may be used and returns IntRangeSets.
-        (Remember that the Stop number in slice notation is exclusive.)
-
-        >>> print(IntRangeSet('100:200,1000')[0:10]) # Integers 0 (inclusive) to 10 (exclusive)
-        IntRangeSet('100:110')
-
-        >>> print(IntRangeSet('100:200,1000')[0:10:2]) # Integers 0 (inclusive) to 10 (exclusive) with step 2
-        IntRangeSet('100,102,104,106,108')
-
-        >>> print(IntRangeSet('100:200,1000')[-3:]) # The last three integers in the IntRangeSet.
-        IntRangeSet('198:200,1000')
-
-        An IntRangeSet can also be accessed with any ranges input.
-
-        >>> IntRangeSet('100:200,1000')['0:10,20']
-        IntRangeSet('100:110,120')
         '''
         if isinstance(key,int):
             if key >= 0:
@@ -1090,17 +912,9 @@ class IntRangeSet(object):
         * ``a + b``
         * ``a.union(b)``
 
-        :Example:
-
-        >>> print(IntRangeSet('0:5,6:10') |) 5
-        IntRangeSet('0:10')
-
         The 'union' method also support unioning multiple ranges inputs,
 
         :Example:
-
-        >>> print(IntRangeSet('0:5,6:10').union(5,'100:200'))
-        IntRangeSet('0:10,100:200')
         '''
         result = IntRangeSet()
         result.add(*ranges_inputs)
@@ -1131,12 +945,6 @@ class IntRangeSet(object):
         Raises an IndexError is x not in a.
 
         ``* a.index(x)``
-
-
-        >>> print(IntRangeSet('100:110,1000').index(109))
-        9
-        >>> print(IntRangeSet('100:110,1000').index('109,100:104'))
-        IntRangeSet('0:4,9')
         '''
         if isinstance(other,int):
             return self._index_element(other)
@@ -1187,12 +995,6 @@ class IntRangeSet(object):
         '''
         True exactly when the two sets have no integer elements in common.
 
-        :Example:
-
-        >>> print(IntRangeSet('100:110,1000').isdisjoint('900:2000'))
-        False
-        >>> print(IntRangeSet('100:110,1000').isdisjoint('1900:2000'))
-        True
         '''
         isempty_generator = (IntRangeSet(tuple)._binary_intersection(self).isempty for tuple in IntRangeSet._static_ranges(ranges))
         return all(isempty_generator)
@@ -1207,9 +1009,6 @@ class IntRangeSet(object):
         * ``a.issubset(b)``
 
         :Example:
-
-        >>> print(IntRangeSet('0:5,6:11') <= '-1:101') # The right-hand can be any ranges input
-        True
 
         Note: By definition, any set is a subset of itself.
         '''
@@ -1226,9 +1025,6 @@ class IntRangeSet(object):
         * ``a < b``
 
         :Example:
-
-        >>> print(IntRangeSet('0:5,6:11') < '-1:101') # The right-hand can be any ranges input
-        True
 
         Note: By definition, no set is a proper subset of itself.
         '''
@@ -1264,15 +1060,6 @@ class IntRangeSet(object):
 
         :Example:
 
-        >>> print(IntRangeSet('0:5,6:11') &) '3:8'
-        IntRangeSet('3:5,6:8')
-
-        The 'intersection' method also support intersecting multiple ranges inputs,
-
-        :Example:
-
-        >>> print(IntRangeSet('0:5,6:11').intersection('3:8','4:7'))
-        IntRangeSet('4,6')
         '''
         ranges_inputs = IntRangeSet._make_args_range_set(*ranges_inputs) #generator to made every ranges a IntRangeSet
         ranges_inputs = sorted(ranges_inputs,key=lambda int_range_set:len(int_range_set._start_items)) #sort so that IntRangeSet with smaller range_count is first
@@ -1334,13 +1121,6 @@ class IntRangeSet(object):
         * ``a - b``
         * ``a.difference(b)``
 
-        :Example:
-
-        >>> print(IntRangeSet('0:5,6:11') -) 1
-        IntRangeSet('0,2:5,6:11')
-        >>> print(IntRangeSet('0:5,6:11') -) '3:100'
-        IntRangeSet('0:3')
-
         The 'difference' method also supports subtracting multiple input ranges
 
         :Example:
@@ -1367,8 +1147,6 @@ class IntRangeSet(object):
 
         :Example:
 
-        >>> print(IntRangeSet('0:5,6:11') ^) '3:9'
-        IntRangeSet('0:3,5,9:11')
         '''
         result = self - ranges
         diff_generator = (IntRangeSet(tuple)-self for tuple in IntRangeSet._static_ranges(ranges))
@@ -1513,14 +1291,6 @@ class IntRangeSet(object):
 
         Removing with an integer position index:
 
-        >>> a = IntRangeSet('100:200,1000')
-        >>> del a[2]
-        >>> print(a)
-        IntRangeSet('100:102,103:200,1000')
-        >>> del a[-1]
-        >>> print(a)
-        IntRangeSet('100:102,103:200')
-
         :Example:
 
         Removing with a slice:
@@ -1588,12 +1358,6 @@ class IntRangeSet(object):
 
         :Example:
 
-        >>> for i in reversed(IntRangeSet('1:4,10')):
-        ...     print i
-        10
-        3
-        2
-        1
         '''
         for start in reversed(self._start_items):
             length = self._start_to_length[start]
@@ -1802,7 +1566,7 @@ class IntRangeSet(object):
         assert len(self._start_items) == len(self._start_to_length)
 
 
-class TestLoader(unittest.TestCase):     
+class TestLoader(unittest.TestCase):
 
     def test_int_range_set(self):
         IntRangeSet._test()

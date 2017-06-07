@@ -17,8 +17,8 @@ class Ped(_OneShot,SnpReader):
 
     This format is described in http://pngu.mgh.harvard.edu/~purcell/plink/data.shtml#ped and looks like::
 
-         FAM001  1  0 0  1  2  A A  G G  A C 
-         FAM001  2  0 0  1  2  A A  A G  0 0 
+         FAM001  1  0 0  1  2  A A  G G  A C
+         FAM001  2  0 0  1  2  A A  A G  0 0
          ...
 
     the direction of the encoding from allele pair to 0,1,2 is arbitrary. That is, if the alleles are "A" and "G", then "G G" could be 0 and "A A" could be 2 or visa versa. The pair "A G" will always be 1.
@@ -53,7 +53,7 @@ class Ped(_OneShot,SnpReader):
         row = ped[:,0:2]
         snpsstr = ped[:,6::]
         inan=snpsstr==self.missing
-        snps = np.zeros((snpsstr.shape[0],snpsstr.shape[1]/2))
+        snps = np.zeros((snpsstr.shape[0], int(snpsstr.shape[1]/2)))
         for i in range(snpsstr.shape[1]//2):
             snps[inan[:,2*i],i]=np.nan
             vals=snpsstr[~inan[:,2*i],2*i:2*(i+1)]
@@ -86,7 +86,7 @@ class Ped(_OneShot,SnpReader):
 
         if isinstance(filename,SnpData) and isinstance(snpdata,str): #For backwards compatibility, reverse inputs if necessary
             warnings.warn("write statement should have filename before data to write", DeprecationWarning)
-            filename, snpdata = snpdata, filename 
+            filename, snpdata = snpdata, filename
 
         SnpReader._write_map_or_bim(snpdata, filename, remove_suffix="ped", add_suffix="map")
 

@@ -120,10 +120,6 @@ class KernelReader(PstReader):
 
         >>> from pysnptools.kernelreader import KernelNpz
         >>> kernel_on_disk = KernelNpz('pysnptools/examples/toydata.kernel.npz')
-        >>> print(kernel_on_disk.iid[:3]) # print the first three iids
-        [['per0' 'per0']
-         ['per1' 'per1']
-         ['per2' 'per2']]
         """
         assert self.iid0 is self.iid1, "When 'iid' is used, iid0 must be the same as iid1"
         return self.iid0
@@ -229,15 +225,6 @@ class KernelReader(PstReader):
 
         >>> from pysnptools.kernelreader import KernelNpz
         >>> kernel_on_disk = KernelNpz('pysnptools/examples/toydata.kernel.npz')
-        >>> kerneldata1 = kernel_on_disk.read() # Read all the kernel data returning a KernelData instance
-        >>> print(type(kerneldata1.val)) # The KernelData instance contains a ndarray of the data.
-        <type 'numpy.ndarray'>
-        >>> subset_kerneldata = kernel_on_disk[::2].read() # From the disk, read kernel values for every other iid
-        >>> print(subset_kerneldata.val[0,0]) # Print the first kernel value in the subset
-        9923.06992842
-        >>> subsub_kerneldata = subset_kerneldata[:10].read(order='A',view_ok=True) # Create an in-memory subset of the subset with kernel values for the first ten iids. Share memory if practical.
-        >>> import numpy as np
-        >>> #print np.may_share_memory(subset_kerneldata.val, subsub_kerneldata.val) # Do the two ndarray's share memory? They could. Currently they won't.
         """
         val = self._read(None, None, order, dtype, force_python_only, view_ok)
         from .kerneldata import KernelData
@@ -259,8 +246,6 @@ class KernelReader(PstReader):
 
         >>> from pysnptools.kernelreader import KernelNpz
         >>> kernel_on_disk = KernelNpz('pysnptools/examples/toydata.kernel.npz')
-        >>> print(kernel_on_disk.iid_to_index([['per2','per2'],['per1','per1']])) #Find the indexes for two iids.
-        [2 1]
         """
         assert self.iid0 is self.iid1, "When 'iid_to_index' is used, iid0 must be the same as iid1"
         return self.iid0_to_index(list)

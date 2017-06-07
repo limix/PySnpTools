@@ -137,9 +137,6 @@ class Bed(SnpReader):
 
         >>> from pysnptools.snpreader import Pheno, Bed
         >>> import pysnptools.util as pstutil
-        >>> snpdata = Pheno('pysnptools/examples/toydata.phe').read()         # Read data from Pheno format
-        >>> pstutil.create_directory_if_necessary("tempdir/toydata.bed")
-        >>> Bed.write("tempdir/toydata.bed",snpdata,count_A1=False)   # Write data in Bed format
         """
 
         if isinstance(filename,SnpData) and isinstance(snpdata,str): #For backwards compatibility, reverse inputs if necessary

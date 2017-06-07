@@ -42,36 +42,6 @@ def intersect_apply(data_list, sort_by_dataset=True, intersect_before_standardiz
     Notice that only dictionaries are processed in-place. Inputting a :class:`.SnpReader` and :class:`.KernelReader` returns a new class of the same type (unless its iids
     are already ok). Inputting a tuple returns a new tuple (unless its iids are already ok).
 
-    :Example:
-
-    >>> from pysnptools.snpreader import Bed, Pheno
-    >>> from pysnptools.kernelreader import SnpKernel
-    >>> from pysnptools.standardizer import Unit
-    >>>
-    >>> #Create five datasets in different formats
-    >>> ignore_in = None
-    >>> kernel_in = SnpKernel(Bed('tests/datasets/all_chr.maf0.001.N300',count_A1=False),Unit()) # Create a kernel from a Bed file
-    >>> pheno_in = Pheno('tests/datasets/phenSynthFrom22.23.N300.randcidorder.txt',missing="")
-    >>> cov = Pheno('tests/datasets/all_chr.maf0.001.covariates.N300.txt',missing="").read()
-    >>> cov_as_tuple_in = (cov.val,cov.iid) #We could do cov directly, but as an example we make it a tuple.
-    >>>
-    >>> # Create five new datasets with consistent iids
-    >>> ignore_out, kernel_out, pheno_out, cov_as_tuple_out = intersect_apply([ignore_in, kernel_in, pheno_in, cov_as_tuple_in])
-    >>> # Print the first five iids from each dataset
-    >>> print(ignore_out, kernel_out.iid[:5], pheno_out.iid[:5], cov_as_tuple_out[1][:5])
-    None [['POP1' '0']
-     ['POP1' '12']
-     ['POP1' '44']
-     ['POP1' '58']
-     ['POP1' '65']] [['POP1' '0']
-     ['POP1' '12']
-     ['POP1' '44']
-     ['POP1' '58']
-     ['POP1' '65']] [['POP1' '0']
-     ['POP1' '12']
-     ['POP1' '44']
-     ['POP1' '58']
-     ['POP1' '65']]
     """
 
     iid_list = []
@@ -245,16 +215,6 @@ def sub_matrix(val, row_index_list, col_index_list, order='A', dtype=sp.float64)
 
     :rtype: ndarray
 
-    >>> import numpy as np
-    >>> import pysnptools.util as pstutil
-    >>> np.random.seed(0) # set seed so that results are deterministic
-    >>> matrix = np.random.rand(12,7) # create a 12 x 7 ndarray
-    >>> submatrix = pstutil.sub_matrix(matrix,[0,2,11],[6,5,4,3,2,1,0])
-    >>> print((int(submatrix.shape[0]),int(submatrix.shape[1])))
-    (3, 7)
-    >>> print(matrix[2,0] == submatrix[1,6]) #The row # 2 is now #1, the column #0 is now #6.
-    True
-
     Note: Behind the scenes, for performance, this function selects and then calls one of 16 C++ helper functions.
     """
     from pysnptools.snpreader import wrap_matrix_subset
@@ -375,12 +335,6 @@ def weighted_mean(ys, weights):
     :param weights: the weight of each value (unnormalized is fine)
     :type weights: ndarray
     :rtype: the weight mean
-
-
-    >>> ys = np.array([103.664086,89.80645161,83.86888046,90.54141176])
-    >>> weights = np.array([2.340862423,4.982888433,0.17522245,0.098562628])
-    >>> round(weighted_mean(ys, weights),5)
-    93.9487
     '''
     mean = ys.dot(weights)/weights.sum()
     return mean
@@ -395,14 +349,6 @@ def weighted_simple_linear_regression(xs, ys, weights):
     :param weights: the weight of each case (unnormalized is fine)
     :type weights: ndarray
     :rtype: slope, intercept, xmean, ymean
-
-    >>> xs = np.array([53.8329911,57.49486653,60.07392197,60.21081451])
-    >>> ys = np.array([103.664086,89.80645161,83.86888046,90.54141176])
-    >>> weights = np.array([2.340862423,4.982888433,0.17522245,0.098562628])
-    >>> slope, intercept, xmean, ymean = weighted_simple_linear_regression(xs, ys, weights)
-    >>> print(round(slope,5), round(intercept,5), round(xmean,5), round(ymean,5))
-    -3.52643 293.05586 56.46133 93.9487
-
     '''
     xmean = weighted_mean(xs,weights)
     xs_less_mean = xs - xmean

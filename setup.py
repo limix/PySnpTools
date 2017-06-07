@@ -8,7 +8,7 @@ import numpy
 from setuptools import Extension, setup
 
 # Version number
-version = '0.3.12'
+version = '0.4.0'
 
 
 def readme():
@@ -130,7 +130,7 @@ def setup_package():
     setup_requires = ["cython", "numpy"] + pytest_runner
     tests_require = ['pytest']
 
-    setup(
+    metadata = dict(
         name='pysnptools',
         version=version,
         description='PySnpTools',

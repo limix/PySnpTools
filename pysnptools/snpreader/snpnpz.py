@@ -12,7 +12,7 @@ class SnpNpz(PstNpz,SnpReader):
 
     The general NPZ format is described in http://docs.scipy.org/doc/numpy/reference/generated/numpy.savez.html. The SnpNpz format stores
     val, iid, sid, and pos information in NPZ format.
-   
+
     **Constructor:**
         :Parameters: * **filename** (*string*) -- The SnpNpz file to read.
 
@@ -41,9 +41,6 @@ class SnpNpz(PstNpz,SnpReader):
 
         >>> from pysnptools.snpreader import SnpNpz, Bed
         >>> import pysnptools.util as pstutil
-        >>> snpdata = Bed('pysnptools/examples/toydata.bed',count_A1=False)[:,:10].read()     # Read first 10 snps from Bed format
-        >>> pstutil.create_directory_if_necessary("tempdir/toydata10.snp.npz")
-        >>> SnpNpz.write("tempdir/toydata10.snp.npz",snpdata)          # Write data in SnpNpz format
         """
         PstNpz.write(filename,snpdata)
 

@@ -17,16 +17,13 @@ class PstHdf5(PstReader):
 
     The general HDF5 format is described in http://www.hdfgroup.org/HDF5/. The PstHdf5 format stores
     val, row, col, row_property, and col_property information in Hdf5 format.
-   
+
     **Constructor:**
         :Parameters: * **filename** (*string*) -- The PstHdf5 file to read.
 
         :Example:
 
         >>> from pysnptools.pstreader import PstHdf5
-        >>> on_disk = PstHdf5('pysnptools/examples/toydata.iidmajor.snp.hdf5') # PstHdf5 can load .pst.hdf5, .snp.hdf5, and kernel.hdf5
-        >>> print(on_disk.row_count)
-        500
 
     **Methods beyond** :class:`.PstReader`
     '''
@@ -42,7 +39,7 @@ class PstHdf5(PstReader):
         self.filename=filename
 
 
-    def __repr__(self): 
+    def __repr__(self):
         return "{0}('{1}')".format(self.__class__.__name__,self.filename) #!!LATER print non-default values, too
 
     def copyinputs(self, copier):
@@ -120,7 +117,7 @@ class PstHdf5(PstReader):
             if not list[i-1] < list[i]:
                 return False
         return True
-    
+
 
     def __del__(self):
         if self._h5 != None:  # we need to test this because Python doesn't guarantee that __init__ was fully run
@@ -240,18 +237,11 @@ class PstHdf5(PstReader):
         :type hdf5_dtype: string
         :param col_major: Tells if vals should be stored on disk in col_major (default) or row_major format.
         :type col_major: bool
-
-        >>> import numpy as np
-        >>> from pysnptools.pstreader import PstData, PstHdf5
-        >>> import pysnptools.util as pstutil
-        >>> data1 = PstData(row=['a','b','c'],col=['y','z'],val=[[1,2],[3,4],[np.nan,6]],row_property=['A','B','C'])
-        >>> pstutil.create_directory_if_necessary("tempdir/tiny.pst.hdf5")
-        >>> PstHdf5.write("tempdir/tiny.pst.hdf5",data1)          # Write data in PstHdf5 format
         """
 
         if isinstance(filename,PstData) and isinstance(pstdata,str): #For backwards compatibility, reverse inputs if necessary
             warnings.warn("write statement should have filename before data to write", DeprecationWarning)
-            filename, pstdata = pstdata, filename 
+            filename, pstdata = pstdata, filename
 
         assert hdf5_dtype is None or (isinstance(hdf5_dtype, str) and len(hdf5_dtype) == 2 and  hdf5_dtype[0] == 'f'), "Expect hdf5_dtype to be None or to start with 'f', e.g. 'f4' for single, 'f8' for double"
 
