@@ -38,7 +38,7 @@ class IntRangeSet(object):
     >>> int_range_set = IntRangeSet((trans_start,trans_stop)) # creates a IntRangeSet from 29370 (inclusive) to 37381 (exclusive)
     >>> print int_range_set # print at any time to see the current value
     IntRangeSet('29370:37381')
-    
+
     Parse the exon start and last lists from strings to lists of integers (converting 'last' to 'stop')
 
     >>> exon_starts = [int(start) for start in exon_starts.strip(",").split(',')]
@@ -64,7 +64,7 @@ class IntRangeSet(object):
     **Ranges Input**
 
     The input to the :class:`IntRangeSet` constructor and many of its methods is a *ranges input*.
-   
+
     A *ranges input* is one of the following:
 
         * A comma-separated string of integers or integer ranges, e.g., ``'100:500,500:1000,2000'``
@@ -75,7 +75,7 @@ class IntRangeSet(object):
         * A list or iterable (but not tuple) of *ranges inputs*, e.g., ``[1,6,7,(100,200)]``
 
         :Example:
-        
+
         Strings:
 
         >>> a = IntRangeSet("100:500,500:1000,2000")
@@ -165,7 +165,7 @@ class IntRangeSet(object):
     sum of elements in a               ``a.sum()``                        :meth:`sum`
     remove and return an element       ``a.pop()``                        :meth:`pop`
     ================================== ================================== ======================
-    
+
     **Examples, Tips, and Warnings**
 
     The argument to a method and the right-hand side of an operator can be a *ranges input* rather than :class:`IntRangeSet`. For example,
@@ -214,14 +214,14 @@ class IntRangeSet(object):
         else:
             self._start_items = []
             self._start_to_length = {}
-        self.add(*ranges_inputs) 
+        self.add(*ranges_inputs)
 
     def add(self, *ranges_inputs):
         '''
         Union zero or more ranges inputs into the current IntRangeSet.
 
         These are the same:
-        
+
         * ``a |= b``
         * ``a += b``
         * ``a.add(b)``
@@ -485,7 +485,7 @@ class IntRangeSet(object):
         return other in self
     issuperset = __contains__
 
-    
+
     @property
     def isempty(self):
         '''
@@ -601,7 +601,7 @@ class IntRangeSet(object):
         assert [e for e in IntRangeSet("-10:-4,-3")] == [-10,-9,-8,-7,-6,-5,-3]
         int_range_set3 = IntRangeSet(7,10)
         int_range_set3.clear()
-        assert str(int_range_set3) == "IntRangeSet('')" 
+        assert str(int_range_set3) == "IntRangeSet('')"
         assert len(IntRangeSet("-10:-4,-3")) == 7
 
         int_range_set4 = IntRangeSet("-10:-4,-3")
@@ -973,9 +973,9 @@ class IntRangeSet(object):
 
 
 
-    #s[i] ith item of s, origin 0 (3) 
-    #s[i:j] slice of s from i to j (3)(4) 
-    #s[i:j:k] slice of s from i to j with step k (3)(5) 
+    #s[i] ith item of s, origin 0 (3)
+    #s[i:j] slice of s from i to j (3)(4)
+    #s[i:j:k] slice of s from i to j with step k (3)(5)
     def __getitem__(self, key):
         '''
         ``a[i]`` returns the ith integer in sorted order (origin 0) from a, an IntRangeSet
@@ -1039,9 +1039,9 @@ class IntRangeSet(object):
         else:
             start_and_stop_generator = (self._two_index(start_index,stop_index) for start_index,stop_index in IntRangeSet._static_ranges(key))
             return self.intersection(start_and_stop_generator)
-            
 
-    #max(s) largest item of s   
+
+    #max(s) largest item of s
     def max(self):
         '''
         The largest integer element in the IntRangeSet
@@ -1055,7 +1055,7 @@ class IntRangeSet(object):
         start = self._start_items[-1]
         return start + self._start_to_length[start] - 1
 
-    #min(s) smallest item of s   
+    #min(s) smallest item of s
     def min(self):
         '''
         The smallest integer element in the IntRangeSet
@@ -1085,7 +1085,7 @@ class IntRangeSet(object):
         Return the union of a IntRangeSet with zero or more ranges inputs. The original IntRangeSet is not changed.
 
         These are the same:
-        
+
         * ``a | b``
         * ``a + b``
         * ``a.union(b)``
@@ -1109,7 +1109,7 @@ class IntRangeSet(object):
     __add__ = union
 
 
-    #s * n, n shallow copies of s concatenated (2) 
+    #s * n, n shallow copies of s concatenated (2)
     def __mul__(self, n):
         '''
         ``a * n``, produces n shallow copies of a unioned, where a is an IntRangeSet.
@@ -1168,10 +1168,10 @@ class IntRangeSet(object):
         result = position_in_its_range + sum(preceeding_lengths)
         return result
 
-    #s.count(x) total number of occurrences of x in s   
+    #s.count(x) total number of occurrences of x in s
     def count(self, ranges):
         '''
-        The number of times that the elements of ranges appears in the IntRangeSet. Because IntRangeSet is 
+        The number of times that the elements of ranges appears in the IntRangeSet. Because IntRangeSet is
         a set, the number will be either 0 or 1.
 
         >>> print IntRangeSet('100:110,1000').count('105:107,1000')
@@ -1202,7 +1202,7 @@ class IntRangeSet(object):
         True exactly when the IntRangeSet is a subset of the ranges.
 
         These are the same:
-        
+
         * ``a <= b``
         * ``a.issubset(b)``
 
@@ -1258,7 +1258,7 @@ class IntRangeSet(object):
         Return the intersection of a IntRangeSet and zero or more ranges inputs. The original IntRangeSet is not changed.
 
         These are the same:
-        
+
         * ``a & b``
         * ``a.intersection(b)``
 
@@ -1522,7 +1522,7 @@ class IntRangeSet(object):
         IntRangeSet('100:102,103:200')
 
         :Example:
-       
+
         Removing with a slice:
 
         >>> a = IntRangeSet('100:200,1000')
@@ -1544,8 +1544,8 @@ class IntRangeSet(object):
                 for start in self._start_items:
                     length = self._start_to_length[start]
                     if key < length:
-                        self -= start+key 
-                        return 
+                        self -= start+key
+                        return
                     key -= length
                 raise KeyError()
             else:
@@ -1556,7 +1556,7 @@ class IntRangeSet(object):
                     length = self._start_to_length[start]
                     if key < length:
                         self -= start+length-1-key
-                        return 
+                        return
                     key -= length
                 raise KeyError()
         elif isinstance(key, slice):
@@ -1587,7 +1587,7 @@ class IntRangeSet(object):
         reversed(a) is a generator that produces the integer elements of a in order from largest to smallest.
 
         :Example:
-        
+
         >>> for i in reversed(IntRangeSet('1:4,10')):
         ...     print i
         10
@@ -1743,7 +1743,7 @@ class IntRangeSet(object):
         del self._start_to_length[start1]
         self._start_to_length[start1+delta_start]=length1-delta_start
         assert len(self._start_items) == len(self._start_to_length)
-           
+
     def _shorten_first_range(self,start_in,start0,length0):
         assert len(self._start_items) == len(self._start_to_length)
         self._start_to_length[start0] = start_in-start0
@@ -1815,4 +1815,3 @@ if __name__ == "__main__":
 
     IntRangeSet._test()
     doctest.testmod()
-
