@@ -26,7 +26,7 @@ class BetaTrained(Standardizer):
      [ 1.97658863  0.15120608]]
     >>> test = Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False)[0,:].read() # read SNP values for the first iid
     >>> test = test.standardize(betatrained) # Use the mean of the train data to beta standardize the test data.
-    >>> print test.val[0,0]
+    >>> print(test.val[0,0])
     0.681674389547
     """
 

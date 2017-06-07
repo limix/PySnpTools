@@ -27,7 +27,7 @@ class DiagKtoN(Standardizer):
     >>> from pysnptools.snpreader import Bed
     >>> snpdata1 = Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False).read().standardize(Unit()).standardize(DiagKtoN())
     >>> kernel1 = snpdata1.read_kernel(Identity())
-    >>> print np.diag(kernel1.val).sum()
+    >>> print(np.diag(kernel1.val).sum())
     300.0
 
     Example of DiagKtoN to :class:`.KernelData`:
@@ -37,7 +37,7 @@ class DiagKtoN(Standardizer):
     >>> from pysnptools.snpreader import Bed
     >>> snpdata1 = Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False).read().standardize(Unit())
     >>> kernel1 = snpdata1.read_kernel(DiagKtoN(),block_size=None)
-    >>> print np.diag(kernel1.val).sum()
+    >>> print(np.diag(kernel1.val).sum())
     300.0
 
     '''

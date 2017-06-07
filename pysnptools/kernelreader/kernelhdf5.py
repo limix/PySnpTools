@@ -20,7 +20,7 @@ class KernelHdf5(PstHdf5,KernelReader):
 
         >>> from pysnptools.kernelreader import KernelHdf5
         >>> data_on_disk = KernelHdf5('../examples/toydata.kernel.hdf5')
-        >>> print data_on_disk.iid_count
+        >>> print(data_on_disk.iid_count)
         500
 
     **Methods beyond** :class:`.KernelReader`

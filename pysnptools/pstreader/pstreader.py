@@ -262,7 +262,7 @@ class PstReader(object):
             PstNpz('../../tests/datasets/all_chr.maf0.001.N300.pst.npz')[:,::2][:,::2][:,::2][:,::2]
             >>> # Now we read from disk. Only values for one col in every 16 will be read.
             >>> data_sixteenth = sixteenth_reader.read()
-            >>> print data_sixteenth.val[0,3]
+            >>> print(data_sixteenth.val[0,3])
             2.0
 
     The :meth:`read` Method

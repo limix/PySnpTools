@@ -99,14 +99,14 @@ class KernelData(KernelReader,PstData):
         >>> import numpy as np
         >>> kernel_on_disk = KernelNpz('../examples/toydata.kernel.npz')
         >>> kerneldata1 = kernel_on_disk.read() # read all kernel values into memory
-        >>> print np.diag(kerneldata1.val).sum()
+        >>> print(np.diag(kerneldata1.val).sum())
         5000000.0
         >>> kerneldata1.standardize() # standardize changes the values in kerneldata1.val
         KernelData(KernelNpz('../examples/toydata.kernel.npz'))
-        >>> print np.diag(kerneldata1.val).sum()
+        >>> print(np.diag(kerneldata1.val).sum())
         500.0
         >>> kerneldata2 = kernel_on_disk.read().standardize() # Read and standardize in one expression with only one ndarray allocated.
-        >>> print np.diag(kerneldata2.val).sum()
+        >>> print(np.diag(kerneldata2.val).sum())
         500.0
         """
         return standardizer.standardize(self, return_trained=return_trained, force_python_only=force_python_only)

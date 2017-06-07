@@ -20,16 +20,16 @@ class Identity(KernelReader):
 
         >>> from pysnptools.kernelreader import Identity
         >>> identity = Identity(iid=[['fam0','iid0'],['fam0','iid1']])
-        >>> print identity.iid_count
+        >>> print(identity.iid_count)
         2
-        >>> print identity.read().val
+        >>> print(identity.read().val)
         [[ 1.  0.]
          [ 0.  1.]]
 
         >>> identity = Identity(iid=[['fam0','iid0'],['fam0','iid1'],['fam0','iid2']],test=[['fam0','iid1'],['fam0','iid3']])
         >>> print(identity.iid0_count,) identity.iid1_count
         3 2
-        >>> print identity.read().val
+        >>> print(identity.read().val)
         [[ 0.  0.]
          [ 1.  0.]
          [ 0.  0.]]

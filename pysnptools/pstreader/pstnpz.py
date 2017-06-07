@@ -24,7 +24,7 @@ class PstNpz(PstReader):
 
         >>> from pysnptools.pstreader import PstNpz
         >>> data_on_disk = PstNpz('../examples/little.pst.npz')
-        >>> print data_on_disk.iid_count
+        >>> print(data_on_disk.iid_count)
         500
 
     **Methods beyond** :class:`.NpzReader`

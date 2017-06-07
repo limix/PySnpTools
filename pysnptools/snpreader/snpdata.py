@@ -116,14 +116,14 @@ class SnpData(PstData,SnpReader):
         >>> snpdata1 = snp_on_disk.read() # read all SNP values into memory
         >>> print(snpdata1) # Prints the specification for this SnpData
         SnpData(Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False))
-        >>> print snpdata1.val[0,0]
+        >>> print(snpdata1.val[0,0])
         2.0
         >>> snpdata1.standardize() # standardize changes the values in snpdata1.val and changes the specification.
         SnpData(Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False),Unit())
-        >>> print snpdata1.val[0,0]
+        >>> print(snpdata1.val[0,0])
         0.229415733871
         >>> snpdata2 = snp_on_disk.read().standardize() # Read and standardize in one expression with only one ndarray allocated.
-        >>> print snpdata2.val[0,0]
+        >>> print(snpdata2.val[0,0])
         0.229415733871
         """
         self._std_string_list.append(str(standardizer))

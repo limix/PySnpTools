@@ -21,7 +21,7 @@ class IntRangeSet(object):
     >>> a = IntRangeSet("100:500,501:1000") # a is the set of integers from 100 to 500 (exclusive) and 501 to 1000 (exclusive)
     >>> b = IntRangeSet("-20,400:600")      # b is the set of integers -20 and the range 400 to 600 (exclusive)
     >>> c = a | b                           # c is the union of a and b, namely -20 and 100 to 1000 (exclusive)
-    >>> print c
+    >>> print(c)
     IntRangeSet('-20,100:1000')
 
     :Example:
@@ -231,7 +231,7 @@ class IntRangeSet(object):
 
         >>> a = IntRangeSet('0:5,6:10')
         >>> a |= 5
-        >>> print a
+        >>> print(a)
         IntRangeSet('0:10')
 
 
@@ -241,7 +241,7 @@ class IntRangeSet(object):
 
         >>> a = IntRangeSet('0:5,6:10')
         >>> a.add('5','100:200')
-        >>> print a
+        >>> print(a)
         IntRangeSet('0:10,100:200')
         '''
 
@@ -325,7 +325,7 @@ class IntRangeSet(object):
 
         >>> a = IntRangeSet('0:10,12')
         >>> a.clear()
-        >>> print a
+        >>> print(a)
         IntRangeSet('')
 
         '''
@@ -336,7 +336,7 @@ class IntRangeSet(object):
         '''
         The number of integer elements in the IntRangeSet
 
-        >>> print len(IntRangeSet('0:10,12'))
+        >>> print(len(IntRangeSet('0:10,12')))
         11
 
         Note: This is computed in time linear in the number of ranges, rather than integer elements.
@@ -350,7 +350,7 @@ class IntRangeSet(object):
         '''
         The number of contiguous ranges in the IntRangeSet
 
-        >>> print IntRangeSet('0:10,12').ranges_len
+        >>> print(IntRangeSet('0:10,12').ranges_len)
         2
 
         '''
@@ -360,7 +360,7 @@ class IntRangeSet(object):
         '''
         Returns the index-th range in the collection of ranges
 
-        >>> print IntRangeSet('-30:-20,0:10,12').ranges_getitem(1)
+        >>> print(IntRangeSet('-30:-20,0:10,12').ranges_getitem(1))
         (0, 10)
 
         '''
@@ -374,7 +374,7 @@ class IntRangeSet(object):
 
         >>> int_range_set = IntRangeSet('-30:-20,0:10,12')
         >>> index = int_range_set.ranges_index(5)
-        >>> print index
+        >>> print(index)
         1
         >>> int_range_set.ranges_getitem(index)
         (0, 10)
@@ -391,7 +391,7 @@ class IntRangeSet(object):
         '''
         The sum of the integer elements in the IntRangeSet
 
-        >>> print IntRangeSet('0:10,12').sum()
+        >>> print(IntRangeSet('0:10,12').sum())
         57
 
         Note: This is more efficient than ``sum(IntRangeSet('0:10,12'))`` because is computed
@@ -467,9 +467,9 @@ class IntRangeSet(object):
 
         :Example:
 
-        >>> print IntRangeSet('0:5,6:11').issuperset(4,7,8)
+        >>> print(IntRangeSet('0:5,6:11').issuperset(4,7,8))
         True
-        >>> print IntRangeSet('0:5,6:11').issuperset(4,7,8,100)
+        >>> print(IntRangeSet('0:5,6:11').issuperset(4,7,8,100))
         False
 
         Note: By definition, any set is a superset of itself.
@@ -491,9 +491,9 @@ class IntRangeSet(object):
         '''
         True exactly when the IntRangeSet is empty.
 
-        >>> print IntRangeSet().isempty
+        >>> print(IntRangeSet().isempty)
         True
-        >>> print IntRangeSet(4).isempty
+        >>> print(IntRangeSet(4).isempty)
         False
         '''
         return len(self._start_items) == 0
@@ -980,14 +980,14 @@ class IntRangeSet(object):
         '''
         ``a[i]`` returns the ith integer in sorted order (origin 0) from a, an IntRangeSet
 
-        >>> print IntRangeSet('100:200,1000')[0]
+        >>> print(IntRangeSet('100:200,1000')[0])
         100
-        >>> print IntRangeSet('100:200,1000')[10]
+        >>> print(IntRangeSet('100:200,1000')[10])
         110
 
         If i is negative, the indexing goes from the end
 
-        >>> print IntRangeSet('100:200,1000')[-1]
+        >>> print(IntRangeSet('100:200,1000')[-1])
         1000
 
         Python's standard slice notation may be used and returns IntRangeSets.
@@ -1046,7 +1046,7 @@ class IntRangeSet(object):
         '''
         The largest integer element in the IntRangeSet
 
-        >>> print IntRangeSet('0:10,12').max()
+        >>> print(IntRangeSet('0:10,12').max())
         12
 
         Note: This is more efficient than max(IntRangeSet('0:10,12')) because is computed
@@ -1062,7 +1062,7 @@ class IntRangeSet(object):
 
         :Example:
 
-        >>> print IntRangeSet('0:10,12').min()
+        >>> print(IntRangeSet('0:10,12').min())
         0
 
         Note: This is more efficient than ``min(IntRangeSet('0:10,12'))`` because is computed
@@ -1099,7 +1099,7 @@ class IntRangeSet(object):
 
         :Example:
 
-        >>> print IntRangeSet('0:5,6:10').union(5,'100:200')
+        >>> print(IntRangeSet('0:5,6:10').union(5,'100:200'))
         IntRangeSet('0:10,100:200')
         '''
         result = IntRangeSet()
@@ -1133,9 +1133,9 @@ class IntRangeSet(object):
         ``* a.index(x)``
 
 
-        >>> print IntRangeSet('100:110,1000').index(109)
+        >>> print(IntRangeSet('100:110,1000').index(109))
         9
-        >>> print IntRangeSet('100:110,1000').index('109,100:104')
+        >>> print(IntRangeSet('100:110,1000').index('109,100:104'))
         IntRangeSet('0:4,9')
         '''
         if isinstance(other,int):
@@ -1174,7 +1174,7 @@ class IntRangeSet(object):
         The number of times that the elements of ranges appears in the IntRangeSet. Because IntRangeSet is
         a set, the number will be either 0 or 1.
 
-        >>> print IntRangeSet('100:110,1000').count('105:107,1000')
+        >>> print(IntRangeSet('100:110,1000').count('105:107,1000'))
         1
         '''
         if ranges in self:
@@ -1189,9 +1189,9 @@ class IntRangeSet(object):
 
         :Example:
 
-        >>> print IntRangeSet('100:110,1000').isdisjoint('900:2000')
+        >>> print(IntRangeSet('100:110,1000').isdisjoint('900:2000'))
         False
-        >>> print IntRangeSet('100:110,1000').isdisjoint('1900:2000')
+        >>> print(IntRangeSet('100:110,1000').isdisjoint('1900:2000'))
         True
         '''
         isempty_generator = (IntRangeSet(tuple)._binary_intersection(self).isempty for tuple in IntRangeSet._static_ranges(ranges))
@@ -1271,7 +1271,7 @@ class IntRangeSet(object):
 
         :Example:
 
-        >>> print IntRangeSet('0:5,6:11').intersection('3:8','4:7')
+        >>> print(IntRangeSet('0:5,6:11').intersection('3:8','4:7'))
         IntRangeSet('4,6')
         '''
         ranges_inputs = IntRangeSet._make_args_range_set(*ranges_inputs) #generator to made every ranges a IntRangeSet
@@ -1345,7 +1345,7 @@ class IntRangeSet(object):
 
         :Example:
 
-        >>> print IntRangeSet('0:5,6:11').difference('3:100',1)
+        >>> print(IntRangeSet('0:5,6:11').difference('3:100',1))
         IntRangeSet('0,2')
         '''
         result = self.copy()
@@ -1396,7 +1396,7 @@ class IntRangeSet(object):
 
         >>> a = IntRangeSet('0:5,6:11')
         >>> a &= '3:8'
-        >>> print a
+        >>> print(a)
         IntRangeSet('3:5,6:8')
         '''
         return ranges_inputs[0]._clone_state(IntRangeSet.intersection(*ranges_inputs))
@@ -1427,7 +1427,7 @@ class IntRangeSet(object):
 
         >>> a = IntRangeSet('0:5,6:11')
         >>> a -= '3:7'
-        >>> print a
+        >>> print(a)
         IntRangeSet('0:3,7:11')
 
 
@@ -1437,7 +1437,7 @@ class IntRangeSet(object):
 
         >>> a = IntRangeSet('0:5,6:11')
         >>> a.difference_update('3:7','8:100')
-        >>> print a
+        >>> print(a)
         IntRangeSet('0:3,7')
         '''
         for start,stop in IntRangeSet._static_ranges(*ranges_inputs):
@@ -1469,7 +1469,7 @@ class IntRangeSet(object):
 
         >>> a = IntRangeSet('0:5,6:11')
         >>> a ^= '3:8'
-        >>> print a
+        >>> print(a)
         IntRangeSet('0:3,5,8:11')
         '''
         return self._clone_state(self ^ ranges)
@@ -1486,9 +1486,9 @@ class IntRangeSet(object):
         :Example:
 
         >>> a = IntRangeSet('0:5,6:11')
-        >>> print a.pop()
+        >>> print(a.pop())
         10
-        >>> print a
+        >>> print(a)
         IntRangeSet('0:5,6:10')
         '''
         if self.isempty:
@@ -1515,10 +1515,10 @@ class IntRangeSet(object):
 
         >>> a = IntRangeSet('100:200,1000')
         >>> del a[2]
-        >>> print a
+        >>> print(a)
         IntRangeSet('100:102,103:200,1000')
         >>> del a[-1]
-        >>> print a
+        >>> print(a)
         IntRangeSet('100:102,103:200')
 
         :Example:
@@ -1527,7 +1527,7 @@ class IntRangeSet(object):
 
         >>> a = IntRangeSet('100:200,1000')
         >>> del a[2:11]
-        >>> print a
+        >>> print(a)
         IntRangeSet('100:102,111:200,1000')
 
         :Example:
@@ -1536,7 +1536,7 @@ class IntRangeSet(object):
 
         >>> a = IntRangeSet('100:200,1000')
         >>> del a['2:11']
-        >>> print a
+        >>> print(a)
         IntRangeSet('100:102,111:200,1000')
         '''
         if isinstance(key,int):

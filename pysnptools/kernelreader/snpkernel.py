@@ -35,7 +35,7 @@ class SnpKernel(KernelReader):
         >>> print(kernel_on_disk.iid_count                                 ) # iid information is read from disk, but not SNP data
         500
         >>> kerneldata = kernel_on_disk.read().standardize()                # SNPs are read and Unit standardized, 500 at a time, to create a kernel, which is then standardized
-        >>> print kerneldata.val[0,0]
+        >>> print(kerneldata.val[0,0])
         0.992306992842
     '''
     def __init__(self, snpreader, standardizer=None, block_size=None):

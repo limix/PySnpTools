@@ -262,7 +262,7 @@ class SnpReader(PstReader):
             Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False)[:,::2][:,::2][:,::2][:,::2]
             >>> # Now we read from disk. Only values for one sid in every 16 will be read.
             >>> snpdata_sixteenth = sixteenth_snpreader.read()
-            >>> print snpdata_sixteenth.val[0,3]
+            >>> print(snpdata_sixteenth.val[0,3])
             2.0
 
     The :meth:`read` Method
@@ -281,14 +281,14 @@ class SnpReader(PstReader):
             >>> snpdata1 = snp_on_disk.read() # read all SNP values into memory
             >>> print(snpdata1) # Prints the specification for this SnpData
             SnpData(Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False))
-            >>> print snpdata1.val[0,0]
+            >>> print(snpdata1.val[0,0])
             2.0
             >>> snpdata1.standardize() # standardize changes the values in snpdata1.val and changes the specification.
             SnpData(Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False),Unit())
-            >>> print snpdata1.val[0,0]
+            >>> print(snpdata1.val[0,0])
             0.229415733871
             >>> snpdata2 = snp_on_disk.read().standardize() # Read and standardize in one expression with only one ndarray allocated.
-            >>> print snpdata2.val[0,0]
+            >>> print(snpdata2.val[0,0])
             0.229415733871
 
     The :meth:`read_kernel` Method
@@ -301,10 +301,10 @@ class SnpReader(PstReader):
             >>> from pysnptools.standardizer import Unit
             >>> snp_on_disk = Bed('../../tests/datasets/all_chr.maf0.001.N300',count_A1=False) # Specify some data on disk in Bed format
             >>> kerneldata1 = snp_on_disk.read_kernel(Unit()) #Create an in-memory kernel from the snp data on disk.
-            >>> print kerneldata1.val[0,0]
+            >>> print(kerneldata1.val[0,0])
             901.421835903
             >>> kerneldata2 = snp_on_disk.read_kernel(Unit(),block_size=10) #Create an in-memory kernel from the snp data on disk, but only read 10 SNPS at a time from the disk.
-            >>> print kerneldata2.val[0,0]
+            >>> print(kerneldata2.val[0,0])
             901.421835903
 
 

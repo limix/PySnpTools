@@ -250,7 +250,7 @@ def sub_matrix(val, row_index_list, col_index_list, order='A', dtype=sp.float64)
     >>> np.random.seed(0) # set seed so that results are deterministic
     >>> matrix = np.random.rand(12,7) # create a 12 x 7 ndarray
     >>> submatrix = pstutil.sub_matrix(matrix,[0,2,11],[6,5,4,3,2,1,0])
-    >>> print (int(submatrix.shape[0]),int(submatrix.shape[1]))
+    >>> print((int(submatrix.shape[0]),int(submatrix.shape[1])))
     (3, 7)
     >>> print(matrix[2,0] == submatrix[1,6]) #The row # 2 is now #1, the column #0 is now #6.
     True
